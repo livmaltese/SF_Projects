@@ -1,0 +1,28 @@
+public class Test2 {
+    public static void recordLoop(){
+        //Pull active annual accounts
+        List<Account> listOfAnnualAccounts = [SELECT Id FROM Account 
+                                              WHERE Billing_Period__c = 'Annually'
+                                              AND Account_Stage__c IN ('Live','Churning')
+                                              AND RecordTypeId IN ('0121H000000zwC5QAI','0121H000000zwCFQAY') ];
+        
+        for (Account acct : listOfAnnualAccounts){
+            //Pull list of legal entities attached to the account
+            List<Legal_Entity__c> listOfLegalEnts = [SELECT Id FROM Legal_Entity__c 
+                                                     WHERE Account__c =: acct.Id];
+            for (Legal_Entity__c legent : listOfLegalEnts){
+				//Pull usage records attached to the legal entity
+                List<Usage__c> listInvRecords = [SELECT Id, Count__c, UsageType__c, Legal_Entity__r.Name FROM Usage__c 
+                                                 WHERE UsageType__c = 'invoices' 
+                                                 AND Legal_Entity__c =: legent.Id];
+                Decimal invsProcessedCBP = 0;
+                for (Usage__c usage : listInvRecords){
+                    invsProcessedCBP += usage.count__c;
+                }
+                
+            String summaryInvs = 'Invoices Processed:' + invsProcessedCBP; 
+            system.debug(summaryInvs);
+            }
+        }
+    }
+}
