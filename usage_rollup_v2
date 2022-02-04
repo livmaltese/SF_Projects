@@ -1,0 +1,46 @@
+public class Test2 {
+    public static void recordLoop(){
+        //Pull list of active annual accounts
+        List<Account> listOfAnnualAccounts = [SELECT Id, Test_Go_Live_Date__c FROM Account 
+                                              WHERE Billing_Period__c = 'Annually'
+                                              AND Account_Stage__c IN ('Live','Churning')
+                                              AND RecordTypeId IN ('0121H000000zwC5QAI','0121H000000zwCFQAY')];
+        
+        
+        Map<Account, date> acctBillingStart = new Map<Account, date>();
+        for (Account acc : listOfAnnualAccounts){
+            acctBillingStart.put(acc, acc.Test_Go_Live_Date__c);
+            
+        system.debug(acctBillingStart);    
+        	}
+        
+        
+        //Case 1: First term customer:
+        	//Opportunity indicators: RecordType = SAGE APA or BWAP; Type = New Business  
+        	//Billing cycle start date = Go live date + length of trial period if applicable *SPECIFY FREE TRIAL EXTENSION
+        //Case 2: Recontracted customer:
+        	//Opportunity indicators: RecordType = Recontract, (BWAP or Sage APA for older opps), Type = Renewal; Price Conversion; Stage = Implemented, Live
+        	//Billing cycle start date = Billing period start date from opp? 
+        	//*Beanworks only first (change order issue, unreliable live date (confirmation of billing))
+        
+        for (Account acct : listOfAnnualAccounts){
+            //Pull list of legal entities attached to the account
+            List<Legal_Entity__c> listOfLegalEnts = [SELECT Id FROM Legal_Entity__c 
+                                                     WHERE Account__c =: acct.Id];
+            for (Legal_Entity__c legent : listOfLegalEnts){
+				//Pull usage records attached to the legal entities of each active account
+                List<Usage__c> listInvRecords = [SELECT Id, Count__c, UsageType__c, Legal_Entity__r.Name FROM Usage__c 
+                                                 WHERE UsageType__c = 'invoices' 
+                                                 AND Legal_Entity__c =: legent.Id];
+                //Update variable to hold usage in the current period for a given legal entity
+                Decimal invsProcessedCBP = 0;
+                for (Usage__c usage : listInvRecords){
+                    invsProcessedCBP += usage.count__c;
+                }
+            //Debug statement    
+            String summaryInvs = 'Invoices Processed:' + invsProcessedCBP; 
+            system.debug(summaryInvs);
+            }
+        }
+    }
+}
