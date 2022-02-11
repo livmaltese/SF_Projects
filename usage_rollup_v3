@@ -1,10 +1,10 @@
-public class Test2 {
+public class AnnualUsageRollup {
     public static void recordLoop(){
         //Pull list of active annual accounts
-        List<Account> listOfAnnualAccounts = [SELECT Id, Test_Go_Live_Date__c FROM Account 
+        List<Account> listOfAnnualAccounts = [SELECT Id FROM Account 
                                               WHERE Billing_Period__c = 'Annually'
                                               AND Account_Stage__c IN ('Live','Churning')
-                                              AND RecordTypeId IN ('0121H000000zwC5QAI','0121H000000zwCFQAY')];
+                                              AND RecordTypeId IN ('0121H000000zwC5QAI','0121H000000zwCFQAY') LIMIT 3];
         
         
         Map<Account, date> acctBillingStart = new Map<Account, date>();
@@ -17,10 +17,13 @@ public class Test2 {
                                      AND AccountId =: acc.Id
                                      GROUP BY Account.Name];
             
+            if(billingStartList.size() > 0) {
+                system.debug(acc + ': ' + billingStartList[0]);
+            }
+            
             //date billingStartDate;
            // acctBillingStart.put(acc, acc.Test_Go_Live_Date__c);
-            
-        system.debug(billingStartList[0]);    
+                
         	}
         
         //Case 1: First term customer:
@@ -46,7 +49,7 @@ public class Test2 {
                     invsProcessedCBP += usage.count__c;
                 }
             //Debug statement    
-            String summaryInvs = 'Invoices Processed:' + invsProcessedCBP; 
+            String summaryInvs = legent + 'Invoices Processed:' + invsProcessedCBP; 
             system.debug(summaryInvs);
             }
         }
