@@ -1,0 +1,24 @@
+public class RollupTest1 {
+    public static void TrialRun(){
+        List<Legal_Entity__c> listOfLegalEnts = [SELECT Id, Name, Account__r.Name, Invoices_Processed_Current_Period__c, (SELECT Id, Name, date__c, frequency__c, usagetype__c, count__c FROM Usages__r) FROM Legal_Entity__c
+                                           WHERE Account__r.Account_Stage__c IN ('Live','Churning')
+                                           AND Account__r.Billing_Period__c = 'Annually'
+                                           AND Account__r.RecordTypeId IN ('0121H000000zwC5QAI','0121H000000zwCFQAY') LIMIT 30];
+        
+        List<Legal_Entity__c> listOfLegalEntsToUpdate = new List<Legal_Entity__c>();
+        for (Legal_Entity__c legalEnt : listOfLegalEnts){
+            Decimal invsProcessedCBP = 0;
+            for (Usage__c usage : legalEnt.Usages__r){
+                if(usage.frequency__c == 'daily' && usage.usagetype__c == 'invoices'){
+                    invsProcessedCBP += usage.count__c;
+                }
+            }
+            legalEnt.Invoices_Processed_Current_Period__c = invsProcessedCBP;
+            listOfLegalEntsToUpdate.add(legalEnt);
+            String summaryInvs = legalEnt.Name + ', Invoices Processed in Current Period: ' + legalEnt.Invoices_Processed_Current_Period__c; 
+            system.debug(summaryInvs);
+        }
+        system.debug(listOfLegalEntsToUpdate.size());
+        update listOfLegalEntsToUpdate;
+    }
+}
