@@ -1,0 +1,30 @@
+public class BillingDate {
+    public static void findStart(){
+        List<Account> acctStart = [SELECT Id, Name, Go_Live_Date__c, Original_Go_Live_Date__c, (SELECT Billed_date__c, Id, StageName FROM Opportunities WHERE Billed_date__c != null AND StageName IN ('Live', 'Implemented') AND Billed_date__c <= TODAY AND RecordTypeId IN ('0121H000001ND5bQAG', '0121H000001ND5gQAG', '0125a000000dbBsAAI')) FROM Account
+                                   WHERE Account.Billing_Period__c = 'Annually'
+                                   AND Account.Account_Stage__c IN ('Live','Churning')
+                                   AND Account.RecordTypeId IN ('0121H000000zwC5QAI','0121H000000zwCFQAY')];
+        
+        Map<Account, Date> acctBillStart = new Map<Account, Date>();
+        for(Account acc : acctStart){
+            List<Date> oppBillDates = new List<Date>();
+            for(Opportunity opp: acc.Opportunities){
+                oppBillDates.add(opp.Billed_date__c);
+            }
+            
+        date billPeriodStart;    
+        oppBillDates.sort();
+        
+        billPeriodStart = acc.Original_Go_Live_Date__c;
+        if(oppBillDates.size() > 0){
+            billPeriodStart = oppBillDates[oppBillDates.size()-1];
+         }
+            
+        acctBillStart.put(acc, billPeriodStart);    
+        }
+        
+        for(Account a : acctBillStart.keyset()){
+            system.debug(a.Name + ': ' + acctBillStart.get(a));
+        }
+    }
+}
