@@ -1,4 +1,4 @@
-public class BillingDate {
+public class BillingDate {    
     public static void findStart(){
         List<Account> acctStart = [SELECT Id, Name, Go_Live_Date__c, Original_Go_Live_Date__c, (SELECT Billed_date__c, Id, StageName FROM Opportunities WHERE Billed_date__c != null AND StageName IN ('Live', 'Implemented') AND Billed_date__c <= TODAY AND RecordTypeId IN ('0121H000001ND5bQAG', '0121H000001ND5gQAG', '0125a000000dbBsAAI')) FROM Account
                                    WHERE Account.Billing_Period__c = 'Annually'
@@ -12,19 +12,26 @@ public class BillingDate {
                 oppBillDates.add(opp.Billed_date__c);
             }
             
-        date billPeriodStart;    
+        date sfbillPeriodStart;    
         oppBillDates.sort();
         
-        billPeriodStart = acc.Original_Go_Live_Date__c;
+        sfbillPeriodStart = acc.Original_Go_Live_Date__c;
         if(oppBillDates.size() > 0){
-            billPeriodStart = oppBillDates[oppBillDates.size()-1];
+            sfbillPeriodStart = oppBillDates[oppBillDates.size()-1];
          }
             
-        acctBillStart.put(acc, billPeriodStart);    
+        acctBillStart.put(acc, sfbillPeriodStart);    
         }
         
         for(Account a : acctBillStart.keyset()){
-            system.debug(a.Name + ': ' + acctBillStart.get(a));
+            Date currentDate = Date.today();
+            Date billStart = acctBillStart.get(a);
+            if(billStart.addYears(1) < currentDate){
+                do {
+                    billStart = billStart.addYears(1);
+                } while(billStart.addYears(1) < currentDate);
+        	}
+        	system.debug(a.Name + ', Bill Period Start: ' + billStart);
         }
     }
 }
