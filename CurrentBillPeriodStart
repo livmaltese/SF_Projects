@@ -1,0 +1,60 @@
+public class CurrentBillPeriodStart implements 
+	Database.Batchable<sObject>, Database.Stateful{
+	// instance member to retain state across transactions
+    public Integer recordsProcessed = 0;
+    
+    public Database.QueryLocator start(Database.BatchableContext bc) {
+        return Database.getQueryLocator(
+            'SELECT Id, Name, Go_Live_Date__c, Original_Go_Live_Date__c, EST_Billing_Period_Start_Date_Annual__c, (SELECT Billed_date__c, Id, StageName FROM Opportunities WHERE Billed_date__c != null' +
+            'AND StageName IN (\'Live\', \'Implemented\') AND Billed_date__c <= TODAY AND RecordTypeId IN (\'0121H000001ND5bQAG\', \'0121H000001ND5gQAG\', \'0125a000000dbBsAAI\')),' +
+            '(SELECT Id, EST_LegalEnt_Bill_Date_Annual__c FROM Legal_Entities__r) FROM Account' +
+            'WHERE Billing_Period__c = \'Annually\'' +
+            'AND Account_Stage__c IN (\'Live\',\'Churning\')' +
+            'AND RecordTypeId IN (\'0121H000000zwC5QAI\',\'0121H000000zwCFQAY\')'                                             
+        );
+    }
+    
+    public void execute(Database.BatchableContext bc, List<Account> scope){
+        Map<Account, Date> acctBillStart = new Map<Account, Date>();
+        for(Account acc : scope){
+            List<Date> oppBillDates = new List<Date>();
+            for(Opportunity opp: acc.Opportunities){
+                oppBillDates.add(opp.Billed_date__c);
+            }
+            
+        date sfbillPeriodStart;    
+        oppBillDates.sort();
+        
+        sfbillPeriodStart = acc.Original_Go_Live_Date__c;
+        if(oppBillDates.size() > 0){
+            sfbillPeriodStart = oppBillDates[oppBillDates.size()-1];
+         }
+            
+        acctBillStart.put(acc, sfbillPeriodStart);    
+        }
+        
+        List<Legal_Entity__c> legentsToUpdate = new List<Legal_Entity__c>();
+        
+        for(Account a : acctBillStart.keyset()){
+            Date currentDate = Date.today();
+            Date billStart = acctBillStart.get(a);
+            if(billStart.addYears(1) < currentDate){
+                do {
+                    billStart = billStart.addYears(1);
+                } while(billStart.addYears(1) < currentDate);
+        	}
+        	system.debug(a.Name + ', Bill Period Start: ' + billStart);
+            for(Legal_Entity__c legEnt : a.legal_entities__r){
+                legEnt.EST_LegalEnt_Bill_Date_Annual__c = billStart;
+                legentsToUpdate.add(legEnt);
+                recordsProcessed = recordsProcessed + 1;
+                system.debug(legEnt);
+            }
+        }
+    
+    update legentsToUpdate;
+    }
+    
+    public void finish(Database.BatchableContext bc){
+    }
+}
