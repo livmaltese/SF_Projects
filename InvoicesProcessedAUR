@@ -1,0 +1,36 @@
+public class InvoicesProcessedAUR implements Database.Batchable<sObject>, Database.Stateful{
+  // instance member to retain state across transactions
+    public Integer recordsProcessed = 0;
+    
+    String str = 'SELECT Id, Name, Account__r.Name, (SELECT Id, date__c, frequency__c, usagetype__c, count__c FROM Usages__r) FROM Legal_Entity__c ' +
+            'WHERE Account__r.Billing_Period__c = \'Annually\' ' +
+            'AND Account__r.Account_Stage__c IN (\'Live\',\'Churning\') ' +
+            'AND Account__r.RecordTypeId IN (\'0121H000000zwC5QAI\',\'0121H000000zwCFQAY\')' ;    
+    
+    public Database.QueryLocator start(Database.BatchableContext dbc) {
+        return Database.getQueryLocator(str);
+    }
+    
+    public void execute(Database.BatchableContext bc, List<Legal_Entity__c> scope){
+        List<Legal_Entity__c> listOfLegalEntsToUpdate = new List<Legal_Entity__c>();
+        for (Legal_Entity__c legalEnt : scope){
+            Decimal invsProcessedCBP = 0;
+            for (Usage__c usage : legalEnt.Usages__r){
+                if(usage.frequency__c == 'daily' && usage.usagetype__c == 'invoices'){
+                    invsProcessedCBP += usage.count__c;
+                }
+            }
+            legalEnt.Invoices_Processed_Current_Period__c = invsProcessedCBP;
+            listOfLegalEntsToUpdate.add(legalEnt);
+            String summaryInvs = legalEnt.Name + ', Invoices Processed in Current Period: ' + legalEnt.Invoices_Processed_Current_Period__c; 
+            system.debug(summaryInvs);
+        }
+        system.debug(listOfLegalEntsToUpdate.size());
+        update listOfLegalEntsToUpdate;
+        
+    }
+    
+    public void finish(Database.BatchableContext dbc){
+        
+    }
+}
