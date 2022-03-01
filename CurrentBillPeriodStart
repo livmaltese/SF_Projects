@@ -2,7 +2,8 @@ public class CurrentBillPeriodStart implements
   Database.Batchable<sObject>, Database.Stateful{
   // instance member to retain state across transactions
     public Integer recordsProcessed = 0;
-        
+    
+     //Find all active accounts that bill annually and find all legal entities and live or implemented opportunities attached to them
      String s = 'SELECT Id, Name, Go_Live_Date__c, Original_Go_Live_Date__c, EST_Billing_Period_Start_Date_Annual__c, (SELECT Billed_date__c, Id, StageName FROM Opportunities WHERE Billed_date__c != null ' +
             'AND StageName IN (\'Live\', \'Implemented\') AND Billed_date__c <= TODAY AND RecordTypeId IN (\'0121H000001ND5bQAG\', \'0121H000001ND5gQAG\', \'0125a000000dbBsAAI\')), ' +
             '(SELECT Id, EST_LegalEnt_Bill_Date_Annual__c FROM Legal_Entities__r) FROM Account ' +
@@ -15,13 +16,17 @@ public class CurrentBillPeriodStart implements
     }
     
     public void execute(Database.BatchableContext bc, List<Account> scope){
+        //Create a dictionary of accounts that map the account id to billing start date of the latest live or implemented opportunity  
         Map<Account, Date> acctBillStart = new Map<Account, Date>();
+        
+        //Create a list of the billed dates of the relevent opportunities attached to the account from the query
         for(Account acc : scope){
             List<Date> oppBillDates = new List<Date>();
             for(Opportunity opp: acc.Opportunities){
                 oppBillDates.add(opp.Billed_date__c);
             }
-            
+        
+        //Sort list of billing start dates attached to the account, find the latest one, and then set it as the value of the account id key in the dictionary
         date sfbillPeriodStart;    
         oppBillDates.sort();
         
@@ -33,8 +38,10 @@ public class CurrentBillPeriodStart implements
         acctBillStart.put(acc, sfbillPeriodStart);    
         }
         
+        //List of legal entities to be updated
         List<Legal_Entity__c> legentsToUpdate = new List<Legal_Entity__c>();
         
+        //If the last billing start date plus one year is earlier than today keep adding a year to it
         for(Account a : acctBillStart.keyset()){
             Date currentDate = Date.today();
             Date billStart = acctBillStart.get(a);
