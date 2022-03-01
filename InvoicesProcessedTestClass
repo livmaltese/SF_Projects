@@ -1,0 +1,43 @@
+@isTest
+private class TestBillStartDate {
+    @testSetup
+    static void FindBillingStartTest(){
+        //Insert test data
+        Integer k = 199;
+        Integer j = 19;
+        Date d1 = Date.newInstance(2021, 05, 21);
+        Date d2 = Date.newInstance(2021, 05, 30);
+        List<Account> accountList = new List<Account>();
+        List<Legal_Entity__c> legEntList = new List<Legal_Entity__c>();
+        List<Opportunity> oppList = new List<Opportunity>();
+        for (Integer i=0; i<1; i++){
+            accountList.add(new Account(Name = 'Livs Fake Company' + i, RecordTypeId = '0121H000000zwC5QAI', Account_Stage__c = 'Live', Billing_Period__c = 'Annually'));
+        }
+        insert accountList;
+        
+        for(Account acc : accountList){
+            system.debug(acc.Id);
+            legEntList.add(new Legal_Entity__c(Name = 'Fake LE3 ' + j, LegalEntity_ID__c = 'testting131877' + k, Account__c = acc.Id));
+            legEntList.add(new Legal_Entity__c(Name = 'Fake LE4 ' + j, LegalEntity_ID__c = 'testting2147988' + k, Account__c = acc.Id));
+            oppList.add(new Opportunity(Name = 'Fake Opp 3', RecordTypeId = '0121H000001ND5bQAG', StageName = 'Implemented', Billed_date__c = d2, CloseDate = d1, AccountId = acc.Id, Go_Live_Date__c = d2));
+            oppList.add(new Opportunity(Name = 'Fake Opp 4', RecordTypeId = '0121H000001ND5bQAG', StageName = 'Implemented', Billed_date__c = d2.addDays(7), CloseDate = d1.addDays(7), AccountId = acc.Id, Go_Live_Date__c = d2));
+            k++;
+            j++;
+            d1.addDays(10);
+            d2.addDays(10);
+            acc.Account_Stage__c = 'Live';
+        }
+        insert legEntList;
+        insert oppList;
+        update accountList;
+    }
+
+    @isTest static void test() {
+        Test.startTest();
+        CurrentBillPeriodStart cbp = new CurrentBillPeriodStart();
+        Id batchId = Database.executeBatch(cbp);
+        Test.stopTest();
+        // after the testing stops, assert records were updated properly
+        System.assertEquals(2, [select count() from Legal_Entity__c where EST_LegalEnt_Bill_Date_Annual__c != null]);
+    }    
+}
