@@ -2,10 +2,11 @@ public class InvoicesProcessedAUR implements Database.Batchable<sObject>, Databa
   // instance member to retain state across transactions
     public Integer recordsProcessed = 0;
     
-    String str = 'SELECT Id, Name, Account__r.Name, (SELECT Id, date__c, frequency__c, usagetype__c, count__c FROM Usages__r) FROM Legal_Entity__c ' +
+    String str = 'SELECT Id, Name, Account__r.Name, EST_LegalEnt_Bill_Date_Annual__c, (SELECT Id, date__c, frequency__c, usagetype__c, count__c FROM Usages__r) FROM Legal_Entity__c ' +
             'WHERE Account__r.Billing_Period__c = \'Annually\' ' +
             'AND Account__r.Account_Stage__c IN (\'Live\',\'Churning\') ' +
-            'AND Account__r.RecordTypeId IN (\'0121H000000zwC5QAI\',\'0121H000000zwCFQAY\')' ;    
+            'AND Account__r.RecordTypeId IN (\'0121H000000zwC5QAI\',\'0121H000000zwCFQAY\')' +
+            'AND EST_LegalEnt_Bill_Date_Annual__c != null';    
     
     public Database.QueryLocator start(Database.BatchableContext dbc) {
         return Database.getQueryLocator(str);
@@ -14,9 +15,11 @@ public class InvoicesProcessedAUR implements Database.Batchable<sObject>, Databa
     public void execute(Database.BatchableContext bc, List<Legal_Entity__c> scope){
         List<Legal_Entity__c> listOfLegalEntsToUpdate = new List<Legal_Entity__c>();
         for (Legal_Entity__c legalEnt : scope){
+            Date cbpStart = legalEnt.EST_LegalEnt_Bill_Date_Annual__c;
+            Date cbpEnd = cbpStart.addYears(1);
             Decimal invsProcessedCBP = 0;
             for (Usage__c usage : legalEnt.Usages__r){
-                if(usage.frequency__c == 'daily' && usage.usagetype__c == 'invoices'){
+                if(usage.frequency__c == 'daily' && usage.usagetype__c == 'invoices'  && usage.date__c >= cbpStart && usage.date__c < cbpEnd){
                     invsProcessedCBP += usage.count__c;
                 }
             }
