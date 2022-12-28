@@ -1,0 +1,132 @@
+######## Query Pardot tasks to archive data ########
+
+SELECT Id, Subject, Status, Type, CreatedDate
+FROM Task 
+WHERE Subject LIKE '%Pardot%'
+AND CreatedDate <= 2022-03-01T00:00:00.000Z
+LIMIT 80000
+
+######## Contacts attached to accounts who went live in Jan. and Feb. ########
+
+SELECT Id, Name, Email, Phone, Contact_Status__c, AccountId, Account.Name, Account.Sage_Customer_ID__c, Account.Account_Stage__c, Account_Record_Type__c, fw1__Billing_Contact__c, Primary_Contact__c, HasOptedOutOfEmail, Pendo_Last_Login__c , pendo_bwap_visitor_roles__c
+FROM Contact 
+WHERE Account.Account_Stage__c = 'Live'
+AND fw1__Billing_contact__c = true
+AND Account_Record_Type__c = 'BWAP'
+AND Account.Go_Live_Month__c IN (1,2)
+
+######## Invoice query with QBO info ########
+
+SELECT Id,Tax_Code_ID__c,Tax_Rate_ID__c,fw8_1__QuickBooks_Customer_ID__c,fw8_1__QuickBooks_Invoice_Number__c,
+fw1__Due_Date__c,fw8_1__QuickBooks_ID__c, fw1__Invoice_Date__c,fw1__Email_Currency_Symbol__c 
+FROM fw1__Invoice__c 
+WHERE fw1__Invoice_Date__c = THIS_MONTH
+
+######## Payment filter query - Kulturra ########
+
+SELECT fw8_1__QuickBooks_Deposit_To_Account__c,fw1__Total_Paid_Amount__c,fw8_1__QuickBooks_Credit_Memo_ID__c,
+fw8_1__QuickBooks_Customer_ID__c,fw8_1__QuickBooks_ID__c,fw8_1__QuickBooks_Invoice_ID__c,fw8_1__QuickBooks_Payment_Name__c,
+fw8_1__QuickBooks_Amount__c,fw1__Payment_Date__c,fw1__Email_Currency_Symbol__c,QuickBooks_Exchange_Rate__c,fw8_1__QuickBooks_Payment_Method_ID__c 
+FROM fw1__Payment__c 
+WHERE LastModifiedDate >: lastExecutedDate 
+AND (fw8_1__QB_OK__c = TRUE)
+AND fw1__Invoice__r.ERP_Invoice_ID__c != NULL
+
+######## Invoice filter query ########
+
+SELECT Tax_Code_ID__c,Tax_Rate_ID__c,fw8_1__QuickBooks_Customer_ID__c,fw8_1__QuickBooks_Invoice_Number__c,fw1__Due_Date__c,fw8_1__QuickBooks_ID__c,fw1__Invoice_Date__c,fw1__Email_Currency_Symbol__c,QuickBooks_Exchange_Rate__c,fw1__Email_Message__c,
+(SELECT fw1__Unit_Price__c,Tax_Code_ID__c,fw1__Quantity__c,fw1__Amount__c,Name,fw8_1__QuickBooks_Item_ID__c FROM fw1__Invoice_Lines__r)
+ FROM fw1__Invoice__c 
+ WHERE LastModifiedDate >: lastExecutedDate 
+ AND (fw8_1__QB_OK__c = TRUE)
+ AND ERP_Invoice_ID__c != NULL
+ 
+######## Error log query ########
+
+SELECT Id, Error__c, Sfdc_Record_Id__c, Service_Type__c, Response__c, Object__c, Status__c, CreatedDate
+FROM Error_Log__c
+WHERE CreatedDate >= 2022-12-01T23:01:01+01:00
+AND Object__c = 'Recurring'
+
+######## Recurring invoice line items ########
+
+SELECT Id,fw1__account__r.Country_ISO_Code__c,fw1__account__r.Usage_in_Current_Billing_Period_Annual__c ,ERP_RI_Contract_ID__c,Order_Status__c,
+Overage_Period_Start__c,Overage_Period_End__c,fw1__Billing_Period_Start__c,Last_Day_of_Month_Billing_Period__c,CurrencyIsoCode, 
+(SELECT Id,ERP_Product_Code__c,fw1__Quantity__c,fw1__Product2__r.Name,fw1__Total_Discount_Amount__c,fw1__Unit_Price__c,
+Net_Unit_Price_RI__c, fw1__Amount__c,fw1__Net_Amount__c
+FROM fw1__Recurring_Invoice_Lines__r)
+FROM fw1__Recurring_Invoice__c 
+WHERE Id = 'Active'
+
+######## Attachments query - created this week containing November in title ########
+
+SELECT Id, Name, ParentId, CreatedDate
+FROM Attachment
+WHERE CreatedDate = THIS_WEEK
+AND Name LIKE '%November%'
+
+######## Kulturra error log query ########
+
+SELECT Name, 	fw8__History__c, fw8__Record_Name__c, fw8__Record_ID__c, fw8__Record__c, fw8__Message__c, CreatedDate
+FROM fw8__Error__c
+WHERE CreatedDate = THIS_MONTH
+AND fw8__Record_ID__c IN (SELECT Id FROM fw1__Invoice__c WHERE fw1__Invoice_Date__c = THIS_MONTH)
+
+######## Pull biling contacts from accounts ########
+
+SELECT Id, Name, Email, Phone, Contact_Status__c, AccountId, Account.Name, Account.Sage_Customer_ID__c,
+Account.Account_Stage__c, Account_Record_Type__c, fw1__Billing_Contact__c, Primary_Contact__c, HasOptedOutOfEmail, 
+Pendo_Last_Login__c , pendo_bwap_visitor_roles__c
+FROM Contact 
+WHERE Account.Account_Stage__c = 'Live'
+AND fw1__Billing_contact__c = true
+AND Account_Record_Type__c = 'BWAP'
+
+######## Invoices and auto-bill pay error queries ########
+
+SELECT Name, Id, fw1__Status__c, fw1__Account_Name__c, 	fw1__Account__r.CSM__r.name, Account_Status__c,
+fw1__Billing_Period_Start__c, fw1__Billing_Period_End__c, fw1__Invoice_Date__c, Payment_Date__c, 
+fw1__Total_Invoice_Amount__c, CurrencyIsoCode, fw1__Due_Date__c 
+FROM fw1__Invoice__c 
+WHERE fw1__Billing_Period_Start__c >= 2022-01-01
+
+SELECT Id, Title, Parent.Name, Parent.Id, Parent.Type, CreatedDate, Body 
+FROM Note 
+WHERE Title = 'Auto-BillPay Error'
+AND CreatedDate >= 2022-01-31T23:01:01+01:00
+
+########  ########
+
+########  ########
+
+
+
+########  ########
+
+########  ########
+
+
+
+########  ########
+
+########  ########
+
+
+
+########  ########
+
+########  ########
+
+
+
+########  ########
+
+########  ########
+
+
+
+########  ########
+
+
+
+
