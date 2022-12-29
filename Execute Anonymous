@@ -1,0 +1,25 @@
+# Commission statement send command -- ADSS Global LLC - November 2022 (CAD)
+
+Messaging.SingleEmailMessage message = new Messaging.SingleEmailMessage();
+message.toAddresses = new String[] {'andre.pietramala@beanworks.com.mc.beanworks.ca'}; 
+message.CcAddresses = new String[] {'andre.pietramala@beanworks.com','annabelle.kovacs@beanworks.com','olivia.maltese@beanworks.com'}; 
+message.subject = 'ADSS Global LLC - November 2022 (CAD)';
+message.plainTextBody = ''; 
+message.EntityAttachments = new String[] {'00P5a00001XfSGAEA3'}; 
+Messaging.SingleEmailMessage[] messages = 
+    new List<Messaging.SingleEmailMessage> {message};
+         Messaging.SendEmailResult[] results = Messaging.sendEmail(messages);
+         
+ # Resend recurring invoice to ERP
+ 
+ List<fw1__Recurring_Invoice__c> RecInvs = [SELECT Id,fw1__account__r.Country_ISO_Code__c,
+ fw1__account__r.Usage_in_Current_Billing_Period_Annual__c , ERP_RI_Contract_ID__c,Order_Status__c,
+ Overage_Period_Start__c,Overage_Period_End__c,fw1__Billing_Period_Start__c,Last_Day_of_Month_Billing_Period__c,
+ CurrencyIsoCode, (SELECT Id,ERP_Product_Code__c,fw1__Quantity__c,fw1__Product2__r.Name,
+ fw1__Total_Discount_Amount__c,fw1__Unit_Price__c,Net_Unit_Price_RI__c, fw1__Amount__c,fw1__Net_Amount__c 
+ FROM fw1__Recurring_Invoice_Lines__r) 
+ FROM fw1__Recurring_Invoice__c 
+ WHERE Id = 'a5C8J000000GnhDUAS'];
+
+SendCCODetailstoERP.sendRecurringInvoice(RecInvs, 'BeanWorksOrders');
+
