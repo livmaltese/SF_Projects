@@ -108,29 +108,24 @@ Overage_Period_Start__c, Overage_Period_End__c, fw1__Billing_Period_Start__c, Cu
 FROM fw1__Recurring_Invoice__c 
 WHERE Order_Status__c = 'Active'
 
-########  ########
+########  Price Book Entry query ########
 
-########  ########
-
-
-
-########  ########
-
-########  ########
-
-
+SELECT Name, Pricebook2Id, CurrencyIsoCode, Product2Id, IsActive
+FROM PricebookEntry
 
 ########  ########
 
 ########  ########
 
+########  ########
 
+########  ########
 
 ########  ########
 
 ########  ########
 
-
+########  ########
 
 ########  ########
 
