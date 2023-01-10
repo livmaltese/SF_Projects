@@ -23,3 +23,16 @@ Messaging.SingleEmailMessage[] messages =
 
 SendCCODetailstoERP.sendRecurringInvoice(RecInvs, 'BeanWorksOrders');
 
+# Send Inv to SAP
+
+fw1__Recurring_Invoice__c RI = [SELECT Id FROM fw1__Recurring_Invoice__c WHERE Id = '']
+
+RI.Order_Status__c = 'Pending';
+RI.ERPOrderID__c = '';
+RI.ERPOrderMessage__c = '';
+RI.fw1__Billing_Period_Start__c = Date.newInstance(2022, 12, 01);
+RI.fw1__Billing_Period_Start__c = Date.newInstance(2022, 12, 31);
+RI.fw1__Start_Date__c = Date.newInstance(2022, 12, 01);
+
+update RI;
+
