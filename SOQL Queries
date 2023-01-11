@@ -159,12 +159,33 @@ AND fw1__Product2__r.Name IN ('EFT - Cambridge', 'Wire')
 SELECT Id, Name, IsActive, fw8__QuickBooks_ID__c, fw8__QuickBooks_Income_Account__c, fw8_1__QB_OK__c, GL_Account__c, ERP_Product_Code__c
 FROM Product2
 
+######## Commission statement with full ids ########
+
+SELECT Name, Commissionee_Account__r.Name, Commission_Statement__r.Start_Date__c, Customer_Invoice_Number__c, 
+Customer_Invoice_Number__r.Name, Commission_Percentage__c, Commission_Amount__c, 	Commission_Statement__c, 
+Commission_Statement__r.Name, Currency__c, Customer_Account_Name__r.Name, Invoice_Line_Amount__c, Line_Item_Quantity__c
+FROM Commission_Line_Item__c
+WHERE Commission_Statement__r.Start_Date__c = LAST_MONTH
+
+########  ########
+
+SELECT Commission_Statement__r.Name, Name, Commissionee_Account__r.Name, Commission_Statement__r.Start_Date__c, 
+Customer_Invoice_Number__r.Name, Commission_Percentage__c, Commission_Amount__c, 	Commission_Statement__c, 
+Currency__c, Customer_Account_Name__r.Name, Invoice_Line_Amount__c, Line_Item_Quantity__c
+FROM Commission_Line_Item__c
+WHERE Commission_Statement__r.Start_Date__c = LAST_MONTH
+
+########  ########
+
+########  ########
+
 ########  ########
 
 ########  ########
 
 ########  ########
 
+########  ########
 
 
 
