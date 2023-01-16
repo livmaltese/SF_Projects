@@ -6,6 +6,14 @@ WHERE Subject LIKE '%Pardot%'
 AND CreatedDate <= 2022-03-01T00:00:00.000Z
 LIMIT 80000
 
+
+SELECT Id, Subject, Status, Type, CreatedDate, Ownerid
+FROM Task 
+WHERE Subject LIKE '%Pardot%'
+AND CreatedDate >= 2022-12-01T00:00:00.000Z
+AND OwnerId = '0051H00000AvkDBQAZ'
+
+
 ######## Contacts attached to accounts who went live in Jan. and Feb. ########
 
 SELECT Id, Name, Email, Phone, Contact_Status__c, AccountId, Account.Name, Account.Sage_Customer_ID__c, Account.Account_Stage__c, Account_Record_Type__c, fw1__Billing_Contact__c, Primary_Contact__c, HasOptedOutOfEmail, Pendo_Last_Login__c , pendo_bwap_visitor_roles__c
