@@ -192,6 +192,13 @@ WHERE Order_Status__c IN ('Active', 'Active - Pending Sage', 'On Hold')
 
 ########  ########
 
+SELECT Id, Name, Commissionee_Account__r.Name, Commission_Statement__r.Start_Date__c, Customer_Invoice_Number__c, Customer_Invoice_Number__r.fw1__Billing_Period_Start__c, Customer_Invoice_Number__r.ERP_Invoice_ID__c,
+Customer_Invoice_Number__r.Name, Commission_Percentage__c, Commission_Amount__c, Commission_Statement__c, 
+Commission_Statement__r.Name, Currency__c, Customer_Account_Name__r.Name, Invoice_Line_Amount__c, Line_Item_Quantity__c, Customer_Account_Name__r.ERP_Account_ID__c
+FROM Commission_Line_Item__c
+WHERE Customer_Account_Name__r.ERP_Account_ID__c != NULL
+AND Customer_Invoice_Number__r.ERP_Invoice_ID__c != NULL
+
 ########  ########
 
 ########  ########
