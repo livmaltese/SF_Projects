@@ -10,7 +10,6 @@ LIMIT 80000
 SELECT Id, Subject, Status, Type, CreatedDate, Ownerid
 FROM Task 
 WHERE Subject LIKE '%Pardot%'
-AND CreatedDate >= 2022-12-01T00:00:00.000Z
 AND OwnerId = '0051H00000AvkDBQAZ'
 
 
