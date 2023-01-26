@@ -1,0 +1,65 @@
+######## Contacts attached to accounts who went live in Jan. and Feb. ########
+
+SELECT Id, Name, Email, Phone, Contact_Status__c, AccountId, Account.Name, Account.Sage_Customer_ID__c, Account.Account_Stage__c, Account_Record_Type__c, fw1__Billing_Contact__c, Primary_Contact__c, HasOptedOutOfEmail, Pendo_Last_Login__c , pendo_bwap_visitor_roles__c
+FROM Contact 
+WHERE Account.Account_Stage__c = 'Live'
+AND fw1__Billing_contact__c = true
+AND Account_Record_Type__c = 'BWAP'
+AND Account.Go_Live_Month__c IN (1,2)
+
+######## Invoice filter query ########
+
+SELECT Tax_Code_ID__c,Tax_Rate_ID__c,fw8_1__QuickBooks_Customer_ID__c,fw8_1__QuickBooks_Invoice_Number__c,fw1__Due_Date__c,fw8_1__QuickBooks_ID__c,fw1__Invoice_Date__c,fw1__Email_Currency_Symbol__c,QuickBooks_Exchange_Rate__c,fw1__Email_Message__c,
+(SELECT fw1__Unit_Price__c,Tax_Code_ID__c,fw1__Quantity__c,fw1__Amount__c,Name,fw8_1__QuickBooks_Item_ID__c FROM fw1__Invoice_Lines__r)
+ FROM fw1__Invoice__c 
+ WHERE LastModifiedDate >: lastExecutedDate 
+ AND (fw8_1__QB_OK__c = TRUE)
+ AND ERP_Invoice_ID__c != NULL
+
+######## Recurring invoice line items ########
+
+SELECT Id,fw1__account__r.Country_ISO_Code__c,fw1__account__r.Usage_in_Current_Billing_Period_Annual__c ,ERP_RI_Contract_ID__c,Order_Status__c,
+Overage_Period_Start__c,Overage_Period_End__c,fw1__Billing_Period_Start__c,Last_Day_of_Month_Billing_Period__c,CurrencyIsoCode, 
+(SELECT Id,ERP_Product_Code__c,fw1__Quantity__c,fw1__Product2__r.Name,fw1__Total_Discount_Amount__c,fw1__Unit_Price__c,
+Net_Unit_Price_RI__c, fw1__Amount__c,fw1__Net_Amount__c
+FROM fw1__Recurring_Invoice_Lines__r)
+FROM fw1__Recurring_Invoice__c 
+WHERE Id = 'Active'
+
+######## Pull biling contacts from accounts ########
+
+SELECT Id, Name, Email, Phone, Contact_Status__c, AccountId, Account.Name, Account.Sage_Customer_ID__c,
+Account.Account_Stage__c, Account_Record_Type__c, fw1__Billing_Contact__c, Primary_Contact__c, HasOptedOutOfEmail, 
+Pendo_Last_Login__c , pendo_bwap_visitor_roles__c
+FROM Contact 
+WHERE Account.Account_Stage__c = 'Live'
+AND fw1__Billing_contact__c = true
+AND Account_Record_Type__c = 'BWAP'
+
+########  Sage Billing Contacts Query ########
+
+SELECT Id, Name, Email, Phone, Contact_Status__c, AccountId, Account.Name, Account.Sage_Customer_ID__c, 
+Account.Account_Stage__c, Account_Record_Type__c, fw1__Billing_Contact__c, Primary_Contact__c, 
+HasOptedOutOfEmail, Pendo_Last_Login__c , pendo_bwap_visitor_roles__c
+FROM Contact 
+WHERE Account.Account_Stage__c = 'Live'
+AND fw1__Billing_contact__c = true
+AND Account_Record_Type__c = 'Sage_APA'
+
+
+######## Sage Primary Contacts Query ########
+
+SELECT Id, Name, Email, Phone, Contact_Status__c, AccountId, Account.Name, Account.Sage_Customer_ID__c, 
+Account.Account_Stage__c, Account_Record_Type__c, fw1__Billing_Contact__c, Primary_Contact__c, 
+HasOptedOutOfEmail, pendo_bwap_visitor_email__c, Pendo_Last_Login__c, pendo_bwap_visitor_roles__c
+FROM Contact 
+WHERE Account.Account_Stage__c = 'Live' 
+AND Primary_Contact__c = true 
+AND fw1__Billing_contact__c = false 
+AND Account_Record_Type__c = 'Sage_APA' 
+
+########  ########
+
+########  ########
+
+########  ########
