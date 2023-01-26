@@ -1,0 +1,41 @@
+######## Invoice query with QBO info ########
+
+SELECT Id,Tax_Code_ID__c,Tax_Rate_ID__c,fw8_1__QuickBooks_Customer_ID__c,fw8_1__QuickBooks_Invoice_Number__c,
+fw1__Due_Date__c,fw8_1__QuickBooks_ID__c, fw1__Invoice_Date__c,fw1__Email_Currency_Symbol__c 
+FROM fw1__Invoice__c 
+WHERE fw1__Invoice_Date__c = THIS_MONTH
+
+
+######## Invoice filter query ########
+
+SELECT Tax_Code_ID__c,Tax_Rate_ID__c,fw8_1__QuickBooks_Customer_ID__c,fw8_1__QuickBooks_Invoice_Number__c,fw1__Due_Date__c,fw8_1__QuickBooks_ID__c,fw1__Invoice_Date__c,fw1__Email_Currency_Symbol__c,QuickBooks_Exchange_Rate__c,fw1__Email_Message__c,
+(SELECT fw1__Unit_Price__c,Tax_Code_ID__c,fw1__Quantity__c,fw1__Amount__c,Name,fw8_1__QuickBooks_Item_ID__c FROM fw1__Invoice_Lines__r)
+ FROM fw1__Invoice__c 
+ WHERE LastModifiedDate >: lastExecutedDate 
+ AND (fw8_1__QB_OK__c = TRUE)
+ AND ERP_Invoice_ID__c != NULL
+
+
+######## Invoices and auto-bill pay error queries ########
+
+SELECT Name, Id, fw1__Status__c, fw1__Account_Name__c, 	fw1__Account__r.CSM__r.name, Account_Status__c,
+fw1__Billing_Period_Start__c, fw1__Billing_Period_End__c, fw1__Invoice_Date__c, Payment_Date__c, 
+fw1__Total_Invoice_Amount__c, CurrencyIsoCode, fw1__Due_Date__c 
+FROM fw1__Invoice__c 
+WHERE fw1__Billing_Period_Start__c >= 2022-01-01
+
+######## General Invoice ########
+
+SELECT Name, Id, fw1__Account__c, fw1__Recurring_Invoice__c, fw1__Account__r.ERP_Account_ID__c ,fw1__Status__c, fw1__Billing_Period_Start__c,
+fw1__Billing_Period_End__c, fw1__Invoice_Date__c,  ERP_Invoice_ID__c, ERP_Amount__c, ERP_Tax_Amount__c,
+CurrencyIsoCode, fw1__Due_Date__c, Billing_Cycle__c, fw1__Alternate_Invoice_Number__c, fw1__Entity__c, fw1__Contact__c, RecordTypeId
+FROM fw1__Invoice__c 
+WHERE fw1__Billing_Period_Start__c >= 2022-12-01
+
+########  ########
+
+########  ########
+
+########  ########
+
+
