@@ -11,8 +11,9 @@ WHERE Order_Status__c IN ('Active' , 'Active - Pending Sage', 'Free Trial', 'On 
 
 ######## Pull active recurring invoice info ########
 
-SELECT Id, fw1__Account__c, fw1__account__r.Country_ISO_Code__c, fw1__Opportunity__c, ERP_RI_Contract_ID__c, Order_Status__c,
-Overage_Period_Start__c, Overage_Period_End__c, fw1__Billing_Period_Start__c, CurrencyIsoCode, ERPOrderId__c
+SELECT Id, fw1__Account__c, fw1__Account__r.CurrencyIsoCode, fw1__Account__r.Billing_Currency__c, fw1__Account__r.fw8_1__QB_OK__c,
+fw1__Account__r.fw8__QuickBooks_ID__c, fw1__Opportunity__c, ERP_RI_Contract_ID__c, fw1__Schedule__c,
+Order_Status__c, Overage_Period_Start__c, Overage_Period_End__c, fw1__Billing_Period_Start__c, CurrencyIsoCode, ERPOrderId__c
 FROM fw1__Recurring_Invoice__c 
 WHERE Order_Status__c IN ('Active' , 'Active - Pending Sage', 'Free Trial', 'On Hold', 'Churning')
 
