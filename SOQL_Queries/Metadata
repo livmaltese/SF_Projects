@@ -1,0 +1,40 @@
+######## Pull all fields on an object ########
+
+SELECT Label, QualifiedApiName, DataType
+FROM FieldDefinition
+WHERE EntityDefinition.QualifiedApiName = 'fw1__Recurring_Invoice__c'
+
+######## Active record triggered flows ########
+
+SELECT ApiName, TriggerType, Label 
+FROM FlowDefinitionView 
+WHERE IsActive =true AND (TriggerType='RecordAfterSave' OR TriggerType='RecordBeforeSave')
+
+######## Flow info ########
+
+SELECT Id, Label, IsActive, ProcessType, Description, ActiveVersionId, ApiName, LastModifiedDate,
+RecordTriggerType, TriggerType, TriggerOrder
+FROM FlowDefinitionView
+
+######## Validation rule info ########
+
+SELECT Id, ValidationName, Active, Description, EntityDefinition.DeveloperName, ErrorDisplayField, ErrorMessage 
+FROM ValidationRule
+
+######## Metadata about standard and custom objects ########
+
+Id, FullName, Label, ChildRelationships, Description, DeveloperName, ApexTriggers,
+NamespacePrefix, QualifiedApiName, RecordTypes, ValidationRules
+FROM EntityDefinition
+
+########  ########
+
+########  ########
+
+########  ########
+
+########  ########
+
+########  ########
+
+########  ########
