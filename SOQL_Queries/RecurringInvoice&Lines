@@ -35,8 +35,7 @@ SELECT Id, fw1__Recurring_Invoice__c, fw1__Recurring_Invoice__r.fw1__Account__c,
 fw1__Quantity__c, fw1__Product2__r.Name, fw1__Unit_Price__c, fw1__Amount__c, fw1__Net_Amount__c 
 FROM fw1__Recurring_Invoice_Line__c 
 WHERE fw1__Recurring_Invoice__r.fw1__Is_Active__c = TRUE 
-AND fw1__Product2__r.Name IN ('EFT - Cambridge', 'Wire')
-
+AND fw1__Product2__r.Name IN ('EFT - Cambridge', 'ACH - Cambridge', 'Wire')
 
 ########  ########
 
