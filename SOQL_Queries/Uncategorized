@@ -85,7 +85,12 @@ SELECT Id, Name, IsActive, fw8__QuickBooks_ID__c, fw8__QuickBooks_Income_Account
 FROM Product2
 
 
-########  ########
+######## SAP Billed Accounts ########
+
+SELECT Id, Name, Account_Stage__c, RecordType.Name, RecordTypeId, ERP_Account_ID__c, EmailAddress__c, CurrencyIsoCode, Sales_Organization__c
+FROM Account
+WHERE ERP_Account_ID__c != NULL
+AND Sales_Organization__c IN ('CA00','US00')
 
 ########  ########
 
