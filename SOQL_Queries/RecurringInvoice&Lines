@@ -18,16 +18,15 @@ FROM fw1__Recurring_Invoice__c
 WHERE Order_Status__c IN ('Active' , 'Active - Pending Sage', 'Free Trial', 'On Hold', 'Churning')
 
 
-######## Recurring invoice with line items ########
+######## Monthly Sage SAP Recurring invoices ########
 
-SELECT Id,fw1__account__r.Country_ISO_Code__c, ERP_RI_Contract_ID__c,Order_Status__c,
-Overage_Period_Start__c,Overage_Period_End__c,fw1__Billing_Period_Start__c,Last_Day_of_Month_Billing_Period__c,CurrencyIsoCode, 
-(SELECT Id,ERP_Product_Code__c,fw1__Quantity__c,fw1__Product2__r.Name,fw1__Total_Discount_Amount__c,fw1__Unit_Price__c,
-Net_Unit_Price_RI__c, fw1__Amount__c,fw1__Net_Amount__c
-FROM fw1__Recurring_Invoice_Lines__r)
+SELECT Id, fw1__Account__r.Name, fw1__Account__c, fw1__Account__r.CurrencyIsoCode, fw1__Opportunity__r.Name, ERP_RI_Contract_ID__c, fw1__Schedule__c, Version__c,
+Order_Status__c, Overage_Period_Start__c, Overage_Period_End__c, fw1__Billing_Period_Start__c, CurrencyIsoCode, ERPOrderId__c, Overage_Status__c, Rollup_Invoice_Tier__c, Overages_Last_Month__c, Invoices_Processed_Last_Month__c
 FROM fw1__Recurring_Invoice__c 
-WHERE	Order_Status__c IN ('Active' , 'Active - Pending Sage', 'Free Trial', 'On Hold', 'Churning')
-
+WHERE Order_Status__c IN ('Active')
+AND ERPOrderId__c != NULL
+AND CurrencyIsoCode IN ('CAD','USD')
+AND fw1__Schedule__c = 'Monthly'
 
 ######## Recurring invoice line items for Cambridge billing ########
 
