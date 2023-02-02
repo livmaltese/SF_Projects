@@ -32,7 +32,15 @@ CurrencyIsoCode, fw1__Due_Date__c, Billing_Cycle__c, fw1__Alternate_Invoice_Numb
 FROM fw1__Invoice__c 
 WHERE fw1__Billing_Period_Start__c >= 2022-12-01
 
-########  ########
+######## Overdue Sage Partner invoices ########
+
+SELECT Name, fw1__Account__r.Partners_Account__r.Name, Id, fw1__Account__r.Name, fw1__Account__r.ERP_Account_ID__c ,fw1__Status__c, fw1__Billing_Period_Start__c, fw1__Billing_Period_End__c, ERP_Invoice_ID__c, CurrencyIsoCode, ERP_Amount__c, ERP_Tax_Amount__c, Payment_Date__c
+FROM fw1__Invoice__c 
+WHERE fw1__Account__r.ERP_Account_ID__c != NULL
+AND ERP_Invoice_ID__c != NULL
+AND fw1__Account__r.Partners_Account__c != NULL
+AND fw1__Status__c IN ('Overdue', NULL)
+AND Payment_Date__c = NULL
 
 ########  ########
 
