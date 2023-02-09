@@ -1,0 +1,112 @@
+<apex:page standardController="AP_ROI_Calculator__c" renderAs="pdf">
+         <div class="header" style="text-align:right;">
+             <apex:image width="1.75in" url="{!$Resource.quadient_ap_logo}"/>
+         </div>
+         <h1 style="font-family: sans-serif; font-size: 16pt; text-align:center;">Your Bussiness Case for AP Automation</h1>
+         
+          <table style="font-family: sans-serif; font-size: 11pt; width:85%; margin-left: 45px; padding: 5px;">
+              <tr>
+                <th> Approval Process Management </th>
+              </tr>
+              <tr>
+                <td>Number of FTE that manage approvals: {!AP_ROI_Calculator__c.FTE_Approval_Process_Mgmt__c} </td>
+              </tr>
+              <tr>
+                <td>Percent of day spent managing approvals: {!AP_ROI_Calculator__c.Percentage_of_day_approval_process_mgmt__c}% </td>
+              </tr>
+              <tr>
+                <td>Time spent on managing approvals weekly: {!AP_ROI_Calculator__c.Time_Spent_Approval_Process_Mgmt_Hrs2__c} </td>
+              </tr>
+              <tr>
+                <td>Percent of time saved managing approvals: {!AP_ROI_Calculator__c.Time_saved_app_process_mgmt__c}% </td>
+              </tr>
+              <tr>
+                <td>Time saved managing approvals weekly: {!AP_ROI_Calculator__c.Time_Saved_Approval_Process_Mgmt_Hrs2__c}% </td>
+              </tr>
+         </table>
+         
+         <table style="font-family: sans-serif; font-size: 11pt; width:85%; margin-left: 45px; padding: 5px;">
+              <tr>
+                <th> Audit, Scanning &amp; Storage </th>
+              </tr>
+              <tr>
+                <td>Number of FTE involved in audit, scanning &amp; storage: {!AP_ROI_Calculator__c.FTE_Audit_Scan_Storage__c}</td>
+              </tr>
+              <tr>
+                <td>Percent of day spent on audit, scanning &amp; storage: {!AP_ROI_Calculator__c.Time_Spent_Audit_Scan_Storage__c}% </td>
+              </tr>
+              <tr>
+                <td>Time spent on audit, scanning &amp; storage weekly: {!AP_ROI_Calculator__c.Time_Spent_Audit_Scan_Storage_Hrs2__c} </td>
+              </tr>
+              <tr>
+                <td>Time saved on audit, scanning &amp; storage weekly: {!AP_ROI_Calculator__c.Time_Saved_Audit_Scan_Storage_Hrs2__c}% </td>
+              </tr>
+              
+         </table>
+         
+         <table style="font-family: sans-serif; width:85%; font-size: 11pt; margin-left: 45px; padding: 5px;">
+              <tr>
+                <th> Data Entry </th>
+              </tr>
+              <tr>
+                <td>Number of FTE involved in data entry: {!AP_ROI_Calculator__c.FTE_Data_Entry__c}</td>
+              </tr>
+              <tr>
+                <td>Percent of day spent on data entry: {!AP_ROI_Calculator__c.Percentage_of_day_data_entry__c}% </td>
+              </tr>
+              <tr>
+                <td>Time spent on data entry weekly: {!AP_ROI_Calculator__c.Time_Spent_Data_Entry1_Hrs__c} </td>
+              </tr>
+              <tr>
+                <td>Percent of time saved on data entry: {!AP_ROI_Calculator__c.time_saved_on_data_entry__c}% </td>
+              </tr>
+              
+               <tr>
+                <td>Time saved on data entry weekly: {!AP_ROI_Calculator__c.Time_Saved_Data_Entry_Hrs2__c}% </td>
+              </tr>
+         </table>
+         
+         <table style="font-family: sans-serif; width:85%; font-size: 11pt; margin-left: 45px; padding: 5px;">
+              <tr>
+                <th> Payments </th>
+              </tr>
+              <tr>
+                <td>Number of FTE involved in payments: {!AP_ROI_Calculator__c.FTE_payments__c}</td>
+              </tr>
+              <tr>
+                <td>Percent of day spent on payments: {!AP_ROI_Calculator__c.Percentage_of_day_payments__c}% </td>
+              </tr>
+              <tr>
+                <td>Time spent on payments weekly: {!AP_ROI_Calculator__c.Time_Spent_Payments_Hrs2__c}</td>
+              </tr>
+              <tr>
+                <td>Percent of time saved on payments: {!AP_ROI_Calculator__c.Time_Saved_Payments__c}% </td>
+              </tr>
+              <tr>
+                <td>Time saved on payments weekly: {!AP_ROI_Calculator__c.Time_Saved_Payments_Hrs2__c}% </td>
+              </tr>
+         </table>
+         
+         <table style="font-family: sans-serif; width:85%; font-size: 11pt; margin-left: 45px; padding: 5px;">
+              <tr>
+                <th> PO Matching </th>
+              </tr>
+              <tr>
+                <td>Number of FTE involved in PO matching: {!AP_ROI_Calculator__c.FTE_PO_Matching__c}</td>
+              </tr>
+              <tr>
+                <td>Percent of day spent on PO matching: {!AP_ROI_Calculator__c.Time_Spent_PO_Matching__c}% </td>
+              </tr>
+              <tr>
+                <td>Time spent on PO matching weekly: {!AP_ROI_Calculator__c.Time_Spent_PO_Matching_Hrs__c} </td>
+              </tr>
+              <tr>
+                <td>Percent of time saved on PO matching: {!AP_ROI_Calculator__c.Time_Saved_PO_Matching__c}% </td>
+              </tr>
+              <tr>
+                <td>Time saved on PO matching weekly: {!AP_ROI_Calculator__c.Time_Saved_PO_Matching_Hrs2__c}% </td>
+              </tr>
+         </table>
+
+</apex:page>
+                  
