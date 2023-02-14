@@ -45,8 +45,18 @@ AND fw1__Account__r.Partners_Account__c != NULL
 AND fw1__Status__c IN ('Overdue', NULL)
 AND Payment_Date__c = NULL
 
+######## Overage lines for Sage ########
+
+SELECT Id, Name, fw1__Invoice__r.fw1__Account__r.Name, fw1__Invoice__r.fw1__Billing_Period_Start__c, fw1__Invoice__r.ERP_Invoice_ID__c, fw1__Invoice__r.fw1__Invoice_Date__c, fw1__Amount__c, fw1__Quantity__c, fw1__Unit_Price__c, fw1__Invoice__c
+FROM fw1__Invoice_Line__c
+WHERE Name LIKE '%Overage%'
+AND fw1__Invoice__r.ERP_Invoice_ID__c != NULL
+
 ########  ########
 
 ########  ########
+
+########  ########
+
 
 
