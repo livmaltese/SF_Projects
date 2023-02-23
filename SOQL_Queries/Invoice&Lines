@@ -52,7 +52,13 @@ FROM fw1__Invoice_Line__c
 WHERE Name LIKE '%Overage%'
 AND fw1__Invoice__r.ERP_Invoice_ID__c != NULL
 
-########  ########
+######## Check invoices have been updated for Sage ########
+
+SELECT Name, Id, fw1__Account__c, fw1__Recurring_Invoice__c, fw1__Account__r.ERP_Account_ID__c ,fw1__Status__c, fw1__Billing_Period_Start__c,
+fw1__Billing_Period_End__c, fw1__Invoice_Date__c,  ERP_Invoice_ID__c, ERP_Amount__c, ERP_Tax_Amount__c, fw1__Is_Stop_Collection__c, fw1__Do_Not_Send_Receipt__c, CurrencyIsoCode, fw1__Due_Date__c, Billing_Cycle__c, fw1__Alternate_Invoice_Number__c, fw1__Entity__c, fw1__Contact__c, RecordTypeId, LastModifiedBy.Name
+FROM fw1__Invoice__c 
+WHERE fw1__Billing_Period_Start__c >= 2023-02-01
+AND ERP_Invoice_ID__c != NULL
 
 ########  ########
 
