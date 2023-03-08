@@ -1,4 +1,11 @@
+
 ######## Commission statement with full ids ########
+
+SELECT Id, Name, Commission_Statement_Number__c,Start_Date__c, CurrencyIsoCode
+FROM Commission_Statement__c
+WHERE Start_Date__c = LAST_MONTH
+
+######## Commission statement lines with full ids ########
 
 SELECT Id, Invoice_Line__c, Name, Commissionee_Account__r.Name, Commission_Statement__r.Start_Date__c, Customer_Invoice_Number__c, 
 Customer_Invoice_Number__r.Name, Commission_Percentage__c, Commission_Amount__c, 	Commission_Statement__c, 
