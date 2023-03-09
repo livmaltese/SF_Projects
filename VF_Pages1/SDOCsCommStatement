@@ -1,0 +1,98 @@
+<div style="text-align: center;">
+<div style="background:#eee;border:1px solid #ccc;padding:5px 10px;"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;"><strong><span style="font-size:13pt;"></span><span style="font-size:13pt;">Partner Commission Statement</span></strong></span><br />
+<span style="font-family:lucida sans unicode,lucida grande,sans-serif;"><span style="font-size:12pt;"><strong>{{!Commission_Statement__c.name}}</strong></span><strong><span style="font-size:13pt;"></span></strong></span></div>
+
+<div style="text-align: left;"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;"><span style="font-size:12pt;"></span><br />
+<span style="font-size:12pt;"></span><br />
+<span style="font-size:9pt;"><strong>Vendor:&nbsp;</strong><br />
+{{!Commission_Statement__c.Commissionee_Account__r.name}}</span></span></div>
+
+<div style="text-align: right;">
+<table align="right" style="width: 250px;">
+	<tbody>
+		<tr>
+			<td style="text-align: left; width: 100px;"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;"><span style="font-size:9pt;"><strong>Invoice #</strong></span></span></td>
+			<td style="width: 125px; white-space: nowrap; text-align: right; vertical-align: middle; background-color: rgb(238, 238, 238); border-color: rgb(255, 255, 255);"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;"><span style="font-size:9pt;">{{!Commission_Statement__c.commission_statement_number__c}}</span></span></td>
+		</tr>
+		<tr>
+			<th scope="row" style="text-align: left; width: 100px; vertical-align: middle; white-space: nowrap;"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;"><span style="font-size:9pt;"><strong>Invoice Date</strong></span></span></th>
+			<td style="width: 125px; white-space: nowrap; text-align: right; vertical-align: middle; background-color: rgb(238, 238, 238); border-color: rgb(255, 255, 255);"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;"><span style="font-size:9pt;">{{!DocumentDate}}</span></span></td>
+		</tr>
+		<tr>
+			<th scope="row" style="width: 100px; text-align: left; white-space: nowrap; vertical-align: middle;"><span style="font-size:9pt;"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;">Terms</span></span></th>
+			<td style="width: 125px; white-space: nowrap; text-align: right; vertical-align: middle; background-color: rgb(238, 238, 238); border-color: rgb(255, 255, 255);"><span style="font-size:9pt;"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;">NET 15</span></span></td>
+		</tr>
+		<tr>
+			<th scope="row" style="width: 100px; text-align: left; white-space: nowrap; vertical-align: middle;"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;"><span style="font-size:9pt;">Date Range</span></span></th>
+			<td style="width: 125px; white-space: nowrap; text-align: right; vertical-align: middle; background-color: rgb(238, 238, 238); border-color: rgb(255, 255, 255);"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;"><span style="font-size:9pt;">{{!Commission_Statement__c.start_date__c MMM d, yyyy}} -&nbsp;{{!Commission_Statement__c.end_date__c MMM d, yyyy}}</span></span></td>
+		</tr>
+	</tbody>
+</table>
+</div>
+
+<div style="text-align: left;"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;"><span style="font-size:9pt;"><br />
+<strong>Bill To:</strong><br />
+Beanworks Solutions<br />
+1159 Hamilton Street<br />
+Vancouver, BC V6B 5P6</span></span><span style="font-family:lucida sans unicode,lucida grande,sans-serif;"><span style="font-size:9pt;"><br />
+Canada</span></span></div>
+<br />
+<br />
+<br />
+<style type="text/css">table.table686 {border:solid black 1px; border-collapse:collapse; border-spacing:0px;font-family:Arial Unicode MS,Arial,Helvetica,sans-serif; font-size:10pt; width:100% }
+.table686header {text-align:center;font-weight:bold;border-top:solid black 1px;border-bottom:solid black 1px;}
+.table686footer {text-align:right;font-weight:bold;border:solid black 1px; height: 30px}
+.table686RowEven{}
+.table686RowOdd{background-color:#cdcdcd;}
+.table686col0{text-align:left;font-weight:normal;font-size:9pt;font-family:Arial, Helvetica, sans-serif;}
+.table686col1{text-align:left;font-weight:normal;font-size:9pt;font-family:Arial, Helvetica, sans-serif;}
+.table686col2{text-align:center;font-weight:normal;font-size:9pt;font-family:Arial, Helvetica, sans-serif;}
+.table686col3{text-align:center;font-weight:normal;font-size:9pt;font-family:Arial, Helvetica, sans-serif;}
+.table686col4{text-align:center;font-weight:normal;font-size:9pt;font-family:Arial, Helvetica, sans-serif;}
+.table686col5{text-align:center;font-weight:normal;font-size:9pt;font-family:Arial, Helvetica, sans-serif;}
+.table686col6{text-align:center;font-weight:normal;font-size:9pt;font-family:Arial, Helvetica, sans-serif;}
+.table686col7{text-align:center;font-weight:normal;font-size:9pt;font-family:Arial, Helvetica, sans-serif;}
+</style>
+<span style="font-size:9pt;"> <span style="font-family:lucida sans unicode,lucida grande,sans-serif;"> </span></span>
+<table class="table686">
+	<tbody>
+		<tr>
+			<th class="table686header"><span style="font-size:9pt;"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;">Customer</span></span></th>
+			<th class="table686header"><span style="font-size:9pt;"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;">Product</span></span></th>
+			<th class="table686header"><span style="font-size:9pt;"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;">Quantity</span></span></th>
+			<th class="table686header"><span style="font-size:9pt;"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;">Price</span></span></th>
+			<th class="table686header"><span style="font-size:9pt;"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;">Invoice Line Amount</span></span></th>
+			<th class="table686header"><span style="font-size:9pt;"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;">Commission %</span></span></th>
+			<th class="table686header"><span style="font-size:9pt;"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;">Commission Amount</span></span></th>
+			<th class="table686header"><span style="font-size:9pt;"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;">Invoice #</span></span></th>
+		</tr>
+	</tbody>
+	<tbody><!--{{!
+<lineitems>
+<class>table686</class>
+<listname>commission_line_items__r</listname>
+<column>Customer_Account_Name__r.name</column>
+<column>name</column>
+<column format-number="#,###.##" >line_item_quantity__c</column>
+<column prefix="$"  format-number="#,###.##" >line_item_unit_price__c</column>
+<column prefix="$"  format-number="#,###.##" >invoice_line_amount__c</column>
+<column postfix="%" >commission_percentage__c</column>
+<column mergenext="true" >currency__c</column>
+<column prefix=" $"  format-number="#,###.##" >commission_amount__c</column>
+<column>Customer_Invoice_Number__r.name</column>
+</lineitems>
+}}-->
+	</tbody>
+</table>
+
+<div><span style="font-family:lucida sans unicode,lucida grande,sans-serif;"><span style="font-size: 17.3333px;"><span style="font-size:9pt;"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;">### RELATED LIST No: 686 ###</span></span></span></span></div>
+
+<div style="text-align: right;"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;"><span style="font-size: 17.3333px;"><span style="font-size:9pt;"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;"><span style="font-size: 17.3333px;"><span style="font-size:12pt;"><br />
+<b>Commission Statement Total: $</b><strong>{{!Commission_Statement__c.statement_total__c #,###.##}}</strong></span></span></span></span></span><br />
+<br />
+<br />
+<br />
+<br />
+<span style="font-size:9pt;"></span></span></span><!-- ******************** END RELATED LIST SECTION UNIQUEID:686********************--></div>
+
+<div style="text-align: right;"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;"><span style="font-size: 17.3333px;"></span></span></div>
