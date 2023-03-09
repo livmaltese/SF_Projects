@@ -1,0 +1,164 @@
+<apex:page standardController="AP_ROI_Calculator__c" applyBodyTag="false" renderAs="pdf">
+
+        <head>
+        <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet'/>
+                <style type="text/css" media="print">
+                       @page {
+                                 @top-center {
+                                       content: element(header);
+                               }
+
+                            }
+                                     div.header {
+                                      padding: 10px;
+                                      position: running(header);
+                                      margin-bottom: 25px;
+                           }
+                           
+                       th{
+                            color: white;
+                            background-color: #72BF44;
+                            padding: 4px;
+                       
+                           }
+                           
+                        td{
+                            color: #606060;
+                            text-align:left;
+                            border-spacing:0;
+                            padding: 2px;
+                       
+                           }
+                    </style>
+         </head>
+              
+          <div class="header">
+              <div style="text-align:right;"> <apex:image width="1.7in" url="{!$Resource.quadient_ap_logo}"/> </div>
+          </div>
+         
+          <div>
+             <h2 style="color: #383838; font-weight: lighter; font-family: Calibri, Arial, sans-serif; font-size: 24pt;  padding-top: 55px; padding-bottom: 5px; text-align:center;"> Your Business Case for AP Automation </h2>
+         </div>
+         
+         <table style="font-family: sans-serif; font-size: 10pt; width:85%; margin-left: 45px; padding: 7px; border-spacing:0;">
+              <tr>
+                <th colspan="2"> AP Workflow </th>
+              </tr>
+              <tr>
+                <td style="text-align:left; width:65%;">Number of FTE in AP process: </td>
+                <td style="text-align:left; background-color: ##F0F0F0;"> <apex:outputText value="{0, number, ##}"> <apex:param value="{!AP_ROI_Calculator__c.FTE__c}" /> </apex:outputText> </td>
+              </tr>
+              <tr>
+                <td style="text-align:left; width:65%;">Average number of invoices: </td>
+                <td style="text-align:left; background-color: ##F0F0F0;"> <apex:outputText value="{0, number, ####}"> <apex:param value="{!AP_ROI_Calculator__c.Invoice_Tier__c}" /> </apex:outputText> </td>
+              </tr>
+         </table>
+         
+          <table style="font-family: sans-serif; font-size: 10pt; width:85%; margin-left: 45px; padding: 7px; border-spacing:0;">
+              <tr>
+                <th colspan="2"> Approval Process Management </th>
+              </tr>
+              <tr>
+                <td style="text-align:left; width:65%;">Percent of time spent managing approvals: </td>
+                <td style="text-align:left; background-color: ##F0F0F0;"> <apex:outputText value="{0, number, 00}"> <apex:param value="{!AP_ROI_Calculator__c.Approval_Mgmt_Time_Spent__c}" /> </apex:outputText> % </td>
+              </tr>
+              <tr>
+                <td style="text-align:left; width:65%;">Time spent on managing approvals weekly: </td>
+                <td style="text-align:left; background-color: ##F0F0F0;"> {!AP_ROI_Calculator__c.Approval_Mgmt_Time_Spent_Hrs__c} hours </td>
+              </tr>
+              <tr>
+                <td style="text-align:left; width:65%;">Percent of time saved managing approvals: </td>
+                <td style="text-align:left; background-color: ##F0F0F0;"> <apex:outputText value="{0, number, 00}"> <apex:param value="{!AP_ROI_Calculator__c.Approval_Mgmt_Time_Saved__c}" /> </apex:outputText> % </td>
+              </tr>
+              <tr>
+                <td style="width:65%; color: white; background-color: #72BF44; padding: 2px;">Time saved managing approvals weekly: </td>
+                <td style=" color: white; background-color: #72BF44; padding: 2px;"> {!AP_ROI_Calculator__c.Approval_Mgmt_Time_Saved_Hrs__c} hours </td>
+              </tr>
+         </table>
+         
+         <table style="font-family: sans-serif; font-size: 10pt; width:85%; margin-left: 45px; padding: 7px; border-spacing:0;">
+              <tr>
+                <th colspan="2"> Audit, Scanning &amp; Storage </th>
+              </tr>
+              <tr>
+                <td style="text-align:left; width:65%;">Percent of time spent on audit, scanning &amp; storage: </td>
+                <td style="text-align:left; background-color: ##F0F0F0;"> <apex:outputText value="{0, number, 00}"> <apex:param value="{!AP_ROI_Calculator__c.Audit_Scan_Storage_Time_Spent__c}" /> </apex:outputText> % </td>
+              </tr>
+              <tr>
+                <td style="text-align:left; width:65%;">Time spent on audit, scanning &amp; storage weekly: </td>
+                <td style="text-align:left; background-color: ##F0F0F0;"> {!AP_ROI_Calculator__c.Audit_Scan_Storage_Time_Spent_Hrs__c} hours </td>
+              </tr>
+              <tr>
+                <td style="text-align:left; width:65%;">Percent of time saved on audit, scanning &amp; storage: </td>
+                <td style="text-align:left; background-color: ##F0F0F0;"> <apex:outputText value="{0, number, 00}"> <apex:param value="{!AP_ROI_Calculator__c.Audit_Scan_Storage_Time_Saved__c}" /> </apex:outputText> % </td>
+              </tr>
+              <tr>
+                <td style="width:65%; color: white; background-color: #72BF44; padding: 2px;">Time saved on audit, scanning &amp; storage weekly: </td>
+                <td style=" color: white; background-color: #72BF44; padding: 2px;"> {!AP_ROI_Calculator__c.Audit_Scan_Storage_Time_Saved_Hrs__c} hours </td>
+              </tr>
+              
+         </table>
+         
+         <table style="font-family: sans-serif; width:85%; font-size: 10pt; margin-left: 45px; padding: 7px; border-spacing:0;">
+              <tr>
+                <th colspan="2" > Data Entry </th>
+              </tr>
+              <tr>
+                <td style="text-align:left; width:65%;"> Percent of time spent keying:  </td>
+                <td style="text-align:left; background-color: ##F0F0F0;"> <apex:outputText value="{0, number, 00}"> <apex:param value="{!AP_ROI_Calculator__c.Data_Entry_Time_Spent__c}" /> </apex:outputText> % </td>
+              </tr>
+              <tr>
+                <td style="text-align:left; width:65%;">Time spent on data entry weekly:  </td>
+                <td style="text-align:left; background-color: ##F0F0F0;"> {!AP_ROI_Calculator__c.Data_Entry_Time_Spent_Hrs__c} hours </td>
+              </tr>
+              <tr>
+                <td style="text-align:left; width:65%;">Percent of time saved on data entry:  </td>
+                <td style="text-align:left; background-color: ##F0F0F0;"> <apex:outputText value="{0, number, 00}"> <apex:param value="{!AP_ROI_Calculator__c.Data_Entry_Time_Saved__c}" /> </apex:outputText> % </td>
+              </tr>
+               <tr>
+                <td style="width:65%; color: white; background-color: #72BF44; padding: 2px;">Time saved on data entry weekly: </td>
+                <td style=" color: white; background-color: #72BF44; padding: 2px;"> {!AP_ROI_Calculator__c.Data_Entry_Time_Saved_Hrs__c} hours </td>
+              </tr>
+         </table>
+         
+         <table style="font-family: sans-serif; width:85%; font-size: 10pt; margin-left: 45px; padding: 7px; border-spacing:0;">
+              <tr>
+                <th colspan="2" > Payments </th>
+              </tr>
+              <tr>
+                <td style="text-align:left; width:65%;">Percent of time spent on payments: </td>
+                <td style="text-align:left; background-color: ##F0F0F0;"> <apex:outputText value="{0, number, 00}"> <apex:param value="{!AP_ROI_Calculator__c.Payments_Time_Spent__c}" /> </apex:outputText> % </td>
+              </tr>
+              <tr>
+                <td style="text-align:left; width:65%;">Time spent on payments weekly: </td>
+                <td style="text-align:left; background-color: ##F0F0F0;"> {!AP_ROI_Calculator__c.Payments_Time_Spent_Hrs__c} hours </td>
+              </tr>
+              <tr>
+                <td style="text-align:left; width:65%;">Percent of time saved on payments: </td>
+                <td style="text-align:left; background-color: ##F0F0F0;"> <apex:outputText value="{0, number, 00}"> <apex:param value="{!AP_ROI_Calculator__c.Payments_Time_Saved__c}" /> </apex:outputText> % </td>
+              </tr>
+              <tr>
+                <td style="width:65%; color: white; background-color: #72BF44; padding: 2px;">Time saved on payments weekly: </td>
+                <td style=" color: white; background-color: #72BF44; padding: 2px;"> {!AP_ROI_Calculator__c.Payments_Time_Saved_Hrs__c} hours </td>
+              </tr>
+         </table>
+         
+         <table style="font-family: sans-serif; width:85%; font-size: 10pt; margin-left: 45px; padding: 7px; border-spacing:0;">
+              <tr>
+                <th colspan="2"> PO Matching </th>
+              </tr>
+              <tr>
+                <td style="text-align:left; width:65%;">Percent of time spent on PO matching: </td>
+                <td style="text-align:left; background-color: ##F0F0F0;"> <apex:outputText value="{0, number, 00}"> <apex:param value="{!AP_ROI_Calculator__c.PO_Matching_Time_Spent__c}" /> </apex:outputText> % </td>
+              </tr>
+              <tr>
+                <td style="text-align:left; width:65%;">Time spent on PO matching weekly: </td>
+                <td style="text-align:left; background-color: ##F0F0F0;"> {!AP_ROI_Calculator__c.PO_Matching_Time_Spent_Hrs__c} hours </td>
+              </tr>
+              <tr>
+                <td style="text-align:left; width:65%;">Percent of time saved on PO matching: </td>
+                <td style="text-align:left; background-color: ##F0F0F0;"> <apex:outputText value="{0, number, 00}"> <apex:param value="{!AP_ROI_Calculator__c.PO_Matching_Time_Saved__c}" /> </apex:outputText> % </td>
+              </tr>
+              <tr>
+                <td style=" width:65%; color: white; background-color: #72BF44; padding: 2px;">Time saved on PO matching weekly:  </td>
+                <td style=" color: white; background-color: #72BF44; padding: 2px;"> {!AP_ROI_Calculator__c.PO_Matching_Time_Saved_Hrs__c} hours </td>
