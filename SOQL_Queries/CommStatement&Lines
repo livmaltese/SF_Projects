@@ -1,7 +1,7 @@
 
 ######## Commission statement with full ids ########
 
-SELECT Id, Name, Commission_Statement_Number__c,Start_Date__c, CurrencyIsoCode
+SELECT Id, Name, Commission_Statement_Number__c,Start_Date__c, CurrencyIsoCode, Commissionee_Account__r.Name,  Commissionee_Account__c, Sage_APA_Amount__c, Quadient_AP_Amount__c, Statement_Total__c
 FROM Commission_Statement__c
 WHERE Start_Date__c = LAST_MONTH
 
