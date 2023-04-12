@@ -1,35 +1,22 @@
-
-######## Commission statement with full ids ########
-
-SELECT Id, Name, Commission_Statement_Number__c,Start_Date__c, CurrencyIsoCode, Commissionee_Account__r.Name,  Commissionee_Account__c, Sage_APA_Amount__c, Quadient_AP_Amount__c, Statement_Total__c
-FROM Commission_Statement__c
-WHERE Start_Date__c = LAST_MONTH
-
-######## Commission statement lines with full ids ########
+######## Commission statement lines last month with full ids ########
 
 SELECT Id, Invoice_Line__c, Name, Commissionee_Account__r.Name, Commission_Statement__r.Start_Date__c, Customer_Invoice_Number__c, 
-Customer_Invoice_Number__r.Name, Commission_Percentage__c, Commission_Amount__c, 	Commission_Statement__c, 
-Commission_Statement__r.Name, Currency__c, Customer_Account_Name__r.Name, Invoice_Line_Amount__c, Line_Item_Quantity__c
+Customer_Invoice_Number__r.fw1__Billing_Period_Start__c, Customer_Invoice_Number__r.ERP_Invoice_ID__c,
+Customer_Invoice_Number__r.Name, Commission_Percentage__c, Customer_Invoice_Number__r.fw1__Status__c, 
+Customer_Invoice_Number__r.fw1__Total_Paid_Amount__c, Customer_Invoice_Number__r.Payment_Date__c, 
+Customer_Invoice_Number__r.fw1__Balance_Due__c, Customer_Invoice_Number__r.fw1__Is_Voided__c, Commission_Amount__c, 
+Commission_Statement__c,  Commission_Statement__r.Name, Currency__c, Customer_Account_Name__r.Partners_Account__r.Name, 
+Customer_Account_Name__r.Partners_Account__c, Customer_Account_Name__r.Name, Customer_Account_Name__c, 
+Invoice_Line_Amount__c, Line_Item_Quantity__c, Customer_Account_Name__r.ERP_Account_ID__c
 FROM Commission_Line_Item__c
 WHERE Commission_Statement__r.Start_Date__c = LAST_MONTH
 
 ######## Commission Statements last month ########
 
-SELECT Commission_Statement__r.Name, Name, Commissionee_Account__r.Name, Commission_Statement__r.Start_Date__c, 
-Customer_Invoice_Number__r.Name, Commission_Percentage__c, Commission_Amount__c, 	Commission_Statement__c, 
-Currency__c, Customer_Account_Name__r.Name, Invoice_Line_Amount__c, Line_Item_Quantity__c
-FROM Commission_Line_Item__c
-WHERE Commission_Statement__r.Start_Date__c = LAST_MONTH
-
-
-######## SAP generated commission line items ########
-
-SELECT Id, Name, Commissionee_Account__r.Name, Commission_Statement__r.Start_Date__c, Customer_Invoice_Number__c, Customer_Invoice_Number__r.fw1__Billing_Period_Start__c, Customer_Invoice_Number__r.ERP_Invoice_ID__c,
-Customer_Invoice_Number__r.Name, Commission_Percentage__c, Commission_Amount__c, Commission_Statement__c, 
-Commission_Statement__r.Name, Currency__c, Customer_Account_Name__r.Name, Invoice_Line_Amount__c, Line_Item_Quantity__c, Customer_Account_Name__r.ERP_Account_ID__c
-FROM Commission_Line_Item__c
-WHERE Customer_Account_Name__r.ERP_Account_ID__c != NULL
-AND Customer_Invoice_Number__r.ERP_Invoice_ID__c != NULL
+SELECT CDM__c, Commissionee_Account__c, Commission_Statement_Number__c, CurrencyIsoCode, Id, Month__c, Name,
+Quadient_AP_Amount__c, Sage_APA_Amount__c, Start_Date__c, Statement_Total__c, Year__c
+FROM Commission_Statement__c
+WHERE Start_Date__c = LAST_MONTH
 
 ######## Commission line items that were generated for invoices where there was no payment record attached to the invoice ########
 
@@ -49,11 +36,16 @@ WHERE Customer_Account_Name__r.ERP_Account_ID__c != NULL
 AND Customer_Invoice_Number__r.ERP_Invoice_ID__c != NULL
 AND Commission_Statement__c = NULL
 
-########  ########
+######## SAP related commission line items not attached to a statement ########
 
-SELECT Id, Invoice_Line__c, Name, Commissionee_Account__r.Name, Commission_Statement__r.Start_Date__c, Customer_Invoice_Number__c, Customer_Invoice_Number__r.fw1__Billing_Period_Start__c, Customer_Invoice_Number__r.ERP_Invoice_ID__c,
-Customer_Invoice_Number__r.Name, Commission_Percentage__c, Customer_Invoice_Number__r.fw1__Status__c, Customer_Invoice_Number__r.fw1__Total_Paid_Amount__c, Customer_Invoice_Number__r.Payment_Date__c, Customer_Invoice_Number__r.fw1__Balance_Due__c, Customer_Invoice_Number__r.fw1__Is_Voided__c, Commission_Amount__c, Commission_Statement__c, 
-Commission_Statement__r.Name, Currency__c, Customer_Account_Name__r.Partners_Account__r.Name, Customer_Account_Name__r.Partners_Account__c, Customer_Account_Name__r.Name, Customer_Account_Name__c, Invoice_Line_Amount__c, Line_Item_Quantity__c, Customer_Account_Name__r.ERP_Account_ID__c
+SELECT Id, Invoice_Line__c, Name, Commissionee_Account__r.Name, Commission_Statement__r.Start_Date__c, Customer_Invoice_Number__c, 
+Customer_Invoice_Number__r.fw1__Billing_Period_Start__c, Customer_Invoice_Number__r.ERP_Invoice_ID__c,
+Customer_Invoice_Number__r.Name, Commission_Percentage__c, Customer_Invoice_Number__r.fw1__Status__c, 
+Customer_Invoice_Number__r.fw1__Total_Paid_Amount__c, Customer_Invoice_Number__r.Payment_Date__c, 
+Customer_Invoice_Number__r.fw1__Balance_Due__c, Customer_Invoice_Number__r.fw1__Is_Voided__c, Commission_Amount__c, 
+Commission_Statement__c, Commission_Statement__r.Name, Currency__c, Customer_Account_Name__r.Partners_Account__r.Name, 
+Customer_Account_Name__r.Partners_Account__c, Customer_Account_Name__r.Name, Customer_Account_Name__c, Invoice_Line_Amount__c, 
+Line_Item_Quantity__c, Customer_Account_Name__r.ERP_Account_ID__c
 FROM Commission_Line_Item__c
 WHERE Customer_Account_Name__r.ERP_Account_ID__c != NULL
 AND Customer_Invoice_Number__r.ERP_Invoice_ID__c != NULL
