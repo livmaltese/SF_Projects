@@ -1,3 +1,31 @@
+ACCOUNTS
+
+SELECT Id, Name, Account.Name, Account.RecordType.Name, RecordType.Name, Type, StageName
+FROM Opportunity
+WHERE CloseDate = LAST_N_FISCAL_YEARS:1
+AND Account.RecordType.Name = 'BWAP-Sage APA'
+AND StageName IN ('Churned', 'Recontracted', 'Live', 'Churning')
+
+
+####################################################################################################################
+OPPORTUNITIES
+
+SELECT Id, Name, Account.Name, Account.RecordType.Name, RecordType.Name
+FROM Opportunity
+WHERE Type = 'New Business'
+AND CloseDate = LAST_N_FISCAL_YEARS:1
+
+SELECT Id, Name, Account.Name, Account.RecordType.Name, RecordType.Name, Type, StageName
+FROM Opportunity
+WHERE Type = 'New Business'
+AND CloseDate = LAST_N_FISCAL_YEARS:1
+AND Account.RecordType.Name = 'BWAP-Sage APA'
+AND RecordType.Name != 'Recontract'
+AND StageName != 'Closed Lost'
+
+####################################################################################################################
+CONTACTS
+
 ######## Contacts attached to accounts who went live in Jan. and Feb. ########
 
 SELECT Id, Name, Email, Phone, Contact_Status__c, AccountId, Account.Name, Account.Sage_Customer_ID__c, Account.Account_Stage__c, Account_Record_Type__c, fw1__Billing_Contact__c, Primary_Contact__c, HasOptedOutOfEmail, Pendo_Last_Login__c , pendo_bwap_visitor_roles__c
