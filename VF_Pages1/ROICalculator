@@ -47,7 +47,7 @@
               </tr>
               <tr>
                 <td style="text-align:left; width:65%;">Number of FTE in AP process: </td>
-                <td style="text-align:left; background-color: ##F0F0F0;"> <apex:outputText value="{0, number, ##}"> <apex:param value="{!AP_ROI_Calculator__c.FTE__c}" /> </apex:outputText> </td>
+                <td style="text-align:left; background-color: ##F0F0F0;"> <apex:outputText value="{0, number, ####.##}"> <apex:param value="{!AP_ROI_Calculator__c.FTE__c}" /> </apex:outputText> </td>
               </tr>
               <tr>
                 <td style="text-align:left; width:65%;">Average number of invoices: </td>
@@ -185,4 +185,4 @@
 
 
 </apex:page>
-                        
+                      
