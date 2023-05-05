@@ -6,6 +6,11 @@ WHERE CloseDate = LAST_N_FISCAL_YEARS:1
 AND Account.RecordType.Name = 'BWAP-Sage APA'
 AND StageName IN ('Churned', 'Recontracted', 'Live', 'Churning')
 
+SELECT LongID__c, Name, Account_Stage__c, Original_Go_Live_Date__c, Root_OU_Name__c, Root_OU_ID__c, Number_of_Legal_Entities__c
+FROM Account
+WHERE Account_Stage__c IN ('Live', 'Churned', 'Churning', 'Won')
+AND Sales_Organization__c NOT IN ('GB00','FR00')
+
 
 ####################################################################################################################
 OPPORTUNITIES
