@@ -80,3 +80,13 @@ AND CurrencyIsoCode IN ('CAD','USD')
 AND fw1__Invoice__r.fw1__Account__r.Name NOT IN ('LM Test','KO Test')
 AND fw1__Invoice__r.fw1__Status__c != 'Voided'
 AND fw1__Invoice__r.RecordType.Name = 'Setup Fee Invoice'
+
+######## Paid partner related inv last 6 month (specific partner) ########
+
+SELECT Name, fw1__Account__r.Partners_Account__r.Name, Id, fw1__Account__r.Name, fw1__Account__r.EmailAddress__c, fw1__Account__r.ERP_Account_ID__c , fw1__Invoice_Date__c, fw1__Total_Invoice_Amount__c,
+fw1__Status__c, fw1__Billing_Period_Start__c, fw1__Billing_Period_End__c, fw1__Contact__c,  fw1__Recurring_Invoice__c, fw1__Recurring_Invoice__r.fw1__Contact__r.Name, 
+fw1__Recurring_Invoice__r.fw1__Contact__r.Email, fw1__Recurring_Invoice__r.fw1__Schedule__c, ERP_Invoice_ID__c, 
+CurrencyIsoCode, ERP_Amount__c, ERP_Tax_Amount__c, Payment_Date__c, fw1__Contact__r.Name, fw1__Contact__r.Email
+FROM fw1__Invoice__c 
+WHERE fw1__Invoice_Date__c >= LAST_N_MONTHS:6
+AND fw1__Account__r.Partners_Account__c != NULL
