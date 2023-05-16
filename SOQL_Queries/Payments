@@ -14,3 +14,10 @@ FROM fw1__Payment__c
 WHERE LastModifiedDate >: lastExecutedDate 
 AND (fw8_1__QB_OK__c = TRUE)
 AND fw1__Invoice__r.ERP_Invoice_ID__c != NULL
+
+######## SAP payments ########
+
+SELECT Id, CreatedDate, fw1__Account__c, fw1__Account__r.Name, fw1__Amount__c, fw1__Entity__c, fw1__Invoice__c, fw1__Invoice__r.fw1__Total_Paid_Amount__c, fw1__Invoice__r.fw1__Total_Invoice_Amount__c, fw1__Invoice__r.fw1__Billing_Period_Start__c, fw1__Payment_Date__c, fw1__Payment_Method__c, fw1__Status__c, fw1__Type__c, Name, Transaction2_ID__c 
+FROM fw1__Payment__c
+WHERE fw1__Invoice__r.ERP_Invoice_Id__c != NULL
+AND CurrencyIsoCode IN ('CAD','USD')
