@@ -35,3 +35,9 @@ RI.fw1__Start_Date__c = Date.newInstance(2022, 12, 01);
 
 update RI;
 
+############ Scheduler
+
+string startTime = '9';
+string cron = '0 0 ' + startTime + ' * * ?' ;
+System.schedule('CreateOverageInvoice',cron,new CreateOverageInvoiceSchedule());
+
