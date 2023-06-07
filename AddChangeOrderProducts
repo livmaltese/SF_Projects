@@ -1,0 +1,115 @@
+/**
+ * @description       : Interface v2 add adding products to change order
+ * @author            : o.maltese@quadient.com
+ * @last modified on  : 05-03-2023
+**/
+
+public without sharing class AddChangeOrderProducts {
+    
+    //Confirm if change order should be possible for all record types
+    // Any special config required for EZClub?
+    // Sage NPM --> Sage Moduluar
+    
+    public static List<OpportunityLineItem> oppLines = new List<OpportunityLineItem>();
+
+    @InvocableMethod(label='Create opportunity with products' description='Takes a list of opportunities as input and creates a change order opportunity with products.' category='Opportunity')
+    public static void createChangeOrder(List<Opportunity> opps){
+        
+        if (opps.size() == 0){
+            return;
+        }
+        
+        Opportunity op = opps[0];
+        
+        List<OpportunityLineItem> oldOppProducts = [SELECT Product2Id, Discount FROM OpportunityLineItem 
+                                                           WHERE OpportunityId =: op.Id];
+		Map<Id, Decimal> m1 = new Map<Id, Decimal>();
+
+        for (OpportunityLineItem oldOppProduct : oldOppProducts){
+            m1.put(oldOppProduct.Product2Id, oldOppProduct.Discount);
+        }
+        
+        Opportunity opp = [SELECT Id, AccountId, Account.Name, Account.OwnerId, Account.Financial_System__c, Billing_Cycle__c, CurrencyIsoCode , Distribution_Channel__c, Previously_Contracted__c,
+                           Pricebook2Id, Pricebook2.Name, Sub_Funnel__c, Funnel__c, Account.Partners_Account__c, Account.ERP_Account_ID__c, ProductLineList__c 
+                           FROM Opportunity WHERE Id =: op.Id];
+        
+        Date today = Date.today();
+		Date nextMonth = today.addMonths(1);
+        String month = String.valueOf(nextMonth.month()).leftPad(2, '0');
+        String year = String.valueOf(nextMonth.year()).substring(2,4);
+        String yearMonth = month + '/' + year;
+        String changeOppName = opp.Account.Name + ' Change Order - ' + yearMonth;
+
+        fw1__Recurring_Invoice__c prevRI = [SELECT Id FROM fw1__Recurring_Invoice__c WHERE fw1__Opportunity__c =: opp.Id WITH SECURITY_ENFORCED LIMIT 1];
+
+        Opportunity changeOpp = new Opportunity();
+        changeOpp.RecordTypeId = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Recontract').getRecordTypeId();
+        changeOpp.AccountId = opp.AccountId;
+        changeOpp.LeadSource = 'Renewal';
+        changeOpp.StageName = 'New';
+        changeOpp.Type = 'Change Order';
+        changeOpp.OwnerId = opp.Account.OwnerId;
+        changeOpp.Billing_Cycle__c = opp.Billing_Cycle__c;
+        changeOpp.CSM__c = opp.Account.OwnerId;
+        changeOpp.Previous_Recurring_Invoice__c = prevRI.Id;
+        changeOpp.Previous_Opportunity__c = opp.Id;
+        changeOpp.CurrencyIsoCode = opp.CurrencyIsoCode;
+        changeOpp.Distribution_Channel__c = opp.Distribution_Channel__c;
+        changeOpp.Previously_Contracted__c = opp.Previously_Contracted__c;
+        changeOpp.CloseDate = Date.today()+ 7 ;
+        changeOpp.Go_Live_Date__c = nextMonth.toStartOfMonth() ;
+        changeOpp.Billed_date__c = nextMonth.toStartOfMonth() ;
+        changeOpp.Funnel__c = opp.Funnel__c ;
+        changeOpp.Financial_System__c = opp.Account.Financial_System__c;
+        changeOpp.Sub_Funnel__c = opp.Sub_Funnel__c ;
+        changeOpp.VAR_Account__c = opp.Account.Partners_Account__c;
+        changeopp.Pricebook2Id = opp.Pricebook2Id;
+        changeopp.Name = changeOppName;
+        
+        system.debug(opp.Pricebook2.Name);
+        
+        insert changeopp;
+
+		// If the opp should be billed out of SAP only allow products with an ERP Product ID to be selected        
+        if (opp.Pricebook2.Name == 'Sage APA NPM' ) {
+            
+            return;
+        }
+        
+        else{
+           system.debug('test1' + changeOpp.Previous_Opportunity__c);
+            String conProdructs = '';
+            
+           List<PriceBookEntry> productLineList = [SELECT Id, Name, Product2Id, Product2.ERP_Product_Code__c FROM PriceBookEntry WHERE Pricebook2Id =: opp.Pricebook2Id
+                         AND Product2Id IN (SELECT fw1__Product2__c FROM fw1__Recurring_Invoice_Line__c 
+                         WHERE fw1__Recurring_Invoice__c =: changeOpp.Previous_Recurring_Invoice__c)
+                         AND CurrencyIsoCode =: opp.CurrencyIsoCode
+            			 AND Product2.ERP_Product_Code__c != null WITH SECURITY_ENFORCED];
+        	system.debug(productLineList);
+            
+            for (PriceBookEntry productline : productLineList){
+                
+				 conProdructs += productline.Name + '; ';
+                 OpportunityLineItem oli = new OpportunityLineItem();
+                 oli.OpportunityId = changeopp.Id;
+                 oli.PricebookEntryId = productline.Id;
+                 oli.Quantity = 1;
+                
+                if (m1.keySet().contains(productline.product2Id)){
+                    if (m1.get(productline.product2Id) != NULL ){
+                        oli.Discount = m1.get(productline.product2Id);
+                    }
+                }
+                
+                 oppLines.add(oli);
+            }
+        	system.debug(oppLines);
+            insert oppLines;
+            
+            changeOpp.ProductLineList__c = conProdructs;
+            update changeopp;
+            return; 
+        
+        } 
+    }
+}
