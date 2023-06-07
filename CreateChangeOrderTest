@@ -1,0 +1,103 @@
+@isTest
+public class CreateChangeOrderTest {
+    private static testmethod void RecurringInvoiceTriggerMethod(){
+        Profile systemAdmin = [Select id from profile where name = 'System Administrator'];
+        user systemuser = new user(alias = 'standt',
+                                   email = 'standtuser@testorg.com',
+                                   emailencodingkey='UTF-8',
+                                    lastname = 'testing',
+                                    languagelocalekey='en_US',
+                                    localesidkey='en_US',
+                                    profileid=systemAdmin.Id,
+                                    timezonesidkey='America/Los_Angeles',
+                                    username='userx@quadient.com'
+                                  );
+        System.runAs(systemuser){
+  			// Payment Center Settings
+			fw1__Payment_Center_Setting__c s = new fw1__Payment_Center_Setting__c();
+			s.Name = 'Default Settings';
+ 			insert s;
+        
+			fw1.PackagedData.restoreStripeData();
+
+
+            Account acc = new Account();
+            acc.Name = 'Test Account';
+            acc.Industry_Key__c = '1234';
+            acc.Customer_Account_Group__c='DEBI';
+            acc.CurrencyIsoCode = 'USD' ;
+            acc.Sales_Organization__c='US00';
+            insert acc;
+            
+            Contract cont = new contract();
+            cont.name = 'Test';
+            cont.ERP_Contract_ID__c = '0040009354';
+            cont.AccountId = acc.Id;
+            cont.Status = 'Draft';
+            cont.RecordTypeId = SObjectType.Contract.getRecordTypeInfosByDeveloperName().get('BWAP_NPM_2020').getRecordTypeId();
+            insert cont;
+                        
+            Opportunity opp = new opportunity();
+            opp.name= 'test opp';
+            opp.Distribution_Channel__c = '01 - Enduser';
+            Opp.AccountId = acc.Id;
+            opp.StageName = 'Complete Demo (s)';
+            opp.CloseDate = Date.newInstance(2022, 06, 08);
+            opp.ContractId = cont.Id ;
+            //opp.RecordTypeId = SObjectType.Contract.getRecordTypeInfosByDeveloperName().get('Recontract').getRecordTypeId();
+            opp.CSM__c = '0051H00000AvioJQAR' ;
+            opp.Funnel__c = 'Direct' ;
+            opp.Sub_Funnel__c = 'Modular Pricing';
+            opp.Financial_System__c = 'Quickbooks Desktop' ;
+            opp.Financial_System_Secondary__c = 'Not Applicable';
+            opp.IT_Details__c = 'Internal IT' ;
+            opp.Setup_Terms_Dates__c = 'Completed Integration' ;
+            opp.Billing_Start_Date_Definition__c = 'Completed Integration' ;
+            opp.Go_Live_Date_Definition__c = 'Completed Integration' ;
+            opp.Implementation_End_Date__c = Date.newInstance(2023, 07, 03);
+            opp.IS_Implementation_Start_Date__c = Date.newInstance(2022, 06, 03);
+            opp.Integration_Meeting_Date__c = Date.newInstance(2022, 06, 03);
+            opp.Kick_Off_Date__c = Date.newInstance(2022, 06, 04);
+            opp.Integration_Meeting_Date__c = Date.newInstance(2022, 06, 04);
+            opp.Number_of_Legal_Entities__c = 1 ;
+            opp.Invoice_Quantity_Tier__c = 100 ;
+            opp.Pains__c = 'Increase Control';
+            opp.Purchased_Products__c = 'Invoices';
+            opp.Implementation_Sub_Status__c = 'In Progress';
+            opp.Competitors__c = 'Bill.com';
+            opp.Implementation_Lead_s_Email__c = 'liv@test.com' ;
+            opp.Implementation_Lead_s_Name__c = 'Liv' ;
+            opp.Setup_Terms__c = 'Full Amount';
+            opp.ContractId = cont.Id ;
+            insert opp;
+            
+            OpportunityLineItem oli = new OpportunityLineItem();
+            oli.OpportunityId = opp.Id;
+            oli.PricebookEntryId = '01t1H000006eJ18QAE';
+            oli.Quantity = 1;
+            
+            cont.Opportunity__c = opp.Id ; 
+            cont.Status = 'Activated';
+            Update cont;
+            
+            opp.StageName = 'Closed Won';
+            Update opp;
+            
+           fw1__Recurring_Invoice__c ri = new fw1__Recurring_Invoice__c();
+           ri.RecordTypeId = '0121H000001eXz3QAE';
+			ri.name= 'testri';
+			ri.Order_Status__c = 'Active';
+			ri.fw1__Account__c = acc.Id;
+			ri.CurrencyIsoCode = 'USD';
+			ri.fw1__Opportunity__c = opp.Id;
+			ri.fw1__Billing_Period_Start__c = Date.newInstance(2022, 06, 09);
+			ri.fw1__Start_Date__c = Date.newInstance(2022, 06, 09);
+			ri.fw1__Billing_Period_End__c = Date.newInstance(2023, 06, 09);
+			insert ri;
+     		
+            
+            SendAccountDetailstoERPController.Sendaccountdetails(acc.id);
+
+        }
+    }  
+}
