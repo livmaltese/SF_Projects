@@ -1,0 +1,123 @@
+/**
+ * @description       : Interface v2 add adding products to change order
+ * @author            : o.maltese@quadient.com
+ * @last created on  : 05-03-2023
+ * @last modified on  : 06-26-2023
+**/
+
+public without sharing class CreateChangeOrder {
+    
+    @InvocableMethod(label='Create opportunity with products v2' description='Takes a list of opportunities as input and creates a change order opportunity with products.' category='Opportunity')
+    public static void createChangeOrderOpp(List<Opportunity> opps){
+        
+        if (opps.size() == 0){
+            return;
+        }
+        
+        // Get original opportunity attributes     
+        Opportunity op = opps[0];
+        
+        Opportunity opp = [SELECT Id, AccountId, Account.Name, Account.OwnerId, Account.Financial_System__c, Account.RecordTypeId, Billing_Cycle__c, CurrencyIsoCode , Distribution_Channel__c, Previously_Contracted__c,
+                           Pricebook2Id, Pricebook2.Name, Sub_Funnel__c, Funnel__c, Account.Partners_Account__c, Account.ERP_Account_ID__c, ProductLineList__c 
+                           FROM Opportunity WHERE Id =: op.Id];
+        
+        // Get account record type IDs
+		Id BWAP = Schema.SObjectType.Account.getRecordTypeInfosByName().get('BWAP').getRecordTypeId();
+		Id BWSage = Schema.SObjectType.Account.getRecordTypeInfosByName().get('BWAP-Sage APA').getRecordTypeId();
+		Id SageAPA = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Sage APA').getRecordTypeId();
+        
+        // Create new opportunity name
+        Date today = Date.today();
+		Date nextMonth = today.addMonths(1);
+        String month = String.valueOf(nextMonth.month()).leftPad(2, '0');
+        String year = String.valueOf(nextMonth.year()).substring(2,4);
+        String yearMonth = month + '/' + year;
+        String changeOppName = opp.Account.Name + ' Change Order - ' + yearMonth;
+        
+		// Get previous recurring invoice
+        fw1__Recurring_Invoice__c prevRI = [SELECT Id, Monthly_Subscription_Beanworks__c FROM fw1__Recurring_Invoice__c WHERE fw1__Opportunity__c =: opp.Id AND Order_Status__c = 'Active' WITH SECURITY_ENFORCED LIMIT 1];
+
+        // Create new opportunity
+        Opportunity changeOpp = new Opportunity();
+        changeOpp.RecordTypeId = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Recontract').getRecordTypeId();
+        changeOpp.AccountId = opp.AccountId;
+        changeOpp.LeadSource = 'Renewal';
+        changeOpp.StageName = 'New';
+        changeOpp.Type = 'Change Order';
+        changeOpp.OwnerId = opp.Account.OwnerId;
+        changeOpp.Billing_Cycle__c = opp.Billing_Cycle__c;
+        changeOpp.CSM__c = opp.Account.OwnerId;
+        changeOpp.Previous_Recurring_Invoice__c = prevRI.Id;
+        changeOpp.Previous_Opportunity__c = opp.Id;
+        changeOpp.CurrencyIsoCode = opp.CurrencyIsoCode;
+        changeOpp.Distribution_Channel__c = opp.Distribution_Channel__c;
+        changeOpp.Previously_Contracted__c = prevRI.Monthly_Subscription_Beanworks__c;
+        changeOpp.CloseDate = Date.today()+ 7 ;
+        changeOpp.Go_Live_Date__c = nextMonth.toStartOfMonth() ;
+        changeOpp.Billed_date__c = nextMonth.toStartOfMonth() ;
+        changeOpp.Funnel__c = opp.Funnel__c ;
+        changeOpp.Financial_System__c = opp.Account.Financial_System__c;
+        changeOpp.Sub_Funnel__c = opp.Sub_Funnel__c ;
+        changeOpp.VAR_Account__c = opp.Account.Partners_Account__c;
+        changeopp.Pricebook2Id = opp.Pricebook2Id;
+        changeopp.Name = changeOppName;
+        
+        if()
+        
+        insert changeopp;
+        system.debug(changeopp.Id);
+        
+        addProductsChangeOrder(changeopp);
+    }
+    
+    public static void addProductsChangeOrder(Opportunity newOpp){
+        
+        String concatProducts = '';
+        
+        // Get opportunity
+        Opportunity changeOpp = [SELECT Id, AccountId, Account.RecordTypeId, Billing_Cycle__c, CurrencyIsoCode, Pricebook2Id, Pricebook2.Name, ProductLineList__c,
+                                 Previous_Recurring_Invoice__c FROM Opportunity WHERE Id =: newOpp.Id];
+        
+        // Get account record type IDs
+		Id BWAP = Schema.SObjectType.Account.getRecordTypeInfosByName().get('BWAP').getRecordTypeId();
+		Id BWSage = Schema.SObjectType.Account.getRecordTypeInfosByName().get('BWAP-Sage APA').getRecordTypeId();
+		Id SageAPA = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Sage APA').getRecordTypeId();
+        
+        if(changeOpp.Account.RecordTypeId == SageAPA){
+            
+            return;
+        }
+        
+        if(changeOpp.Account.RecordTypeId == BWAP){
+            
+            List<OpportunityLineItem> oppLinesBWAP = new List<OpportunityLineItem>();
+            Decimal BWAPprice = 0;
+            
+            // Get line items from previous recurring invoice
+        	List<PriceBookEntry> productLineListBWAP = [SELECT Id, Name, Product2Id, Product2.ERP_Product_Code__c FROM PriceBookEntry WHERE Pricebook2Id =: changeOpp.Pricebook2Id
+                         AND Product2Id IN (SELECT fw1__Product2__c FROM fw1__Recurring_Invoice_Line__c 
+                         WHERE fw1__Recurring_Invoice__c =: changeOpp.Previous_Recurring_Invoice__c)
+                         AND Product2.ERP_Product_Code__c != null
+                         AND CurrencyIsoCode =: changeOpp.CurrencyIsoCode WITH SECURITY_ENFORCED];
+            
+            // Create opportunity line items
+            for (PriceBookEntry BWAPline : productLineListBWAP){
+                concatProducts += BWAPline.Name + ', ';
+                OpportunityLineItem oli = new OpportunityLineItem();
+                oli.OpportunityId = changeOpp.Id;
+                oli.PricebookEntryId = BWAPline.Id;
+                oli.Quantity = 1;
+                oppLinesBWAP.add(oli);
+                
+            }
+            // insert line items and update opportunity
+            insert oppLinesBWAP;
+            changeOpp.ProductLineList__c = concatProducts;
+            update changeOpp;
+        }
+        
+        if(changeOpp.Account.RecordTypeId == BWSage){
+            return;
+        }
+    }
+}
