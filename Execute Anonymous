@@ -66,6 +66,11 @@ string startTime = '8';
 string cron = '0 45 ' + startTime + ' * * ?' ;
 System.schedule('CreateACHInvoice',cron,new CreateACHInvoiceSchedule());
 
+#################################################################################
+
+List<Opportunity> opps = [SELECT Id FROM Opportunity WHERE Id = '0065a000019wguoAAA'];
+CreateChangeOrder.createChangeOrderOpp(opps);
+
 #########################################
 
 String objectName = SchemaGlobalDescribe.findObjectNameFromRecordIdPrefix('500'); 
