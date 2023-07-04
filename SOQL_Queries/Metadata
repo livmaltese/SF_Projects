@@ -29,9 +29,9 @@ FROM EntityDefinition
 
 ######## Object Custom fields ########
 
-SELECT Id 
-FROM CustomField 
-WHERE FullName = 'Object_Api_Name__c.Field_Api_Name__c'
+SELECT Id, DeveloperName, TableEnumOrId 
+FROM CustomField
+WHERE DeveloperName = 'Implementation_End_Date'
 
 ######## Where is this used ########
 
