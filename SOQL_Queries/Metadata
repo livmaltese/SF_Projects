@@ -27,9 +27,18 @@ Id, FullName, Label, ChildRelationships, Description, DeveloperName, ApexTrigger
 NamespacePrefix, QualifiedApiName, RecordTypes, ValidationRules
 FROM EntityDefinition
 
-########  ########
+######## Object Custom fields ########
 
-########  ########
+SELECT Id 
+FROM CustomField 
+WHERE FullName = 'Object_Api_Name__c.Field_Api_Name__c'
+
+######## Where is this used ########
+
+SELECT MetadataComponentType, MetadataComponentName, RefMetadataComponentName, RefMetadataComponentId
+FROM MetadataComponentDependency
+WHERE RefMetadataComponentId = 'fieldId' AND RefMetadataComponentType = 'CustomField'
+ORDER By RefMetadataComponentName
 
 ########  ########
 
