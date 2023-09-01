@@ -77,8 +77,6 @@ WHERE Account.Account_Stage__c = 'Live'
 AND fw1__Billing_contact__c = true
 AND Account_Record_Type__c = 'Sage_APA'
 
-
-
 ########  Products with QBO info ########
 
 SELECT Id, Name, IsActive, fw8__QuickBooks_ID__c, fw8__QuickBooks_Income_Account__c, fw8_1__QB_OK__c, GL_Account__c, ERP_Product_Code__c
@@ -92,6 +90,17 @@ FROM Account
 WHERE ERP_Account_ID__c != NULL
 AND Sales_Organization__c IN ('CA00','US00')
 
-########  ########
+######## Sage overages y1 Syed ########
+
+SELECT Id, fw1__Account__c, SageGUID__c, Sage_Overages_Last_Billing_Period__c, fw1__Account__r.Sage_Customer_ID__c, fw1__Billing_Period_Start__c, Rollup_Invoice_Tier__c, Invoices_Processed_Last_Month__c
+FROM fw1__Recurring_Invoice__c 
+WHERE Order_Status__c IN ('Active', 'Active - Pending Sage')
+AND CurrencyIsoCode IN ('CAD','USD')
+AND fw1__Schedule__c = 'Monthly'
+AND Overage_Status__c != 'Waived'
+AND RecordType.Name = 'Sage APA'
+AND Sage_Overage_Formula__c > 0
+AND fw1__Account__r.Pricing_Model__c IN ('NPM','Modurlar Pricing')
+AND fw1__Account__r.Sage_Customer_ID__c != NULL
 
 ########  ########
