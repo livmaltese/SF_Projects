@@ -79,3 +79,7 @@ Customer_Account_Name__r.Partners_Account__c, Customer_Account_Name__r.Name, Cus
 Line_Item_Quantity__c, Customer_Account_Name__r.ERP_Account_ID__c, Invoice_Name__c
 FROM Commission_Line_Item__c
 WHERE Commission_Statement__r.Start_Date__c = LAST_MONTH
+
+######################   List of all objects ##########################
+
+SELECT Label, QualifiedApiName FROM EntityDefinition WHERE IsCustomizable = true
