@@ -42,7 +42,7 @@ ORDER By RefMetadataComponentName
 
 ######################   List of all objects ##########################
 
-SELECT Label, QualifiedApiName FROM EntityDefinition WHERE IsCustomizable = true
+SELECT Label, QualifiedApiName,  NamespacePrefix FROM EntityDefinition WHERE IsCustomizable = true
 
 ########  ########
 
