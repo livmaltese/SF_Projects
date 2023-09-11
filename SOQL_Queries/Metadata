@@ -40,6 +40,10 @@ FROM MetadataComponentDependency
 WHERE RefMetadataComponentId = 'fieldId' AND RefMetadataComponentType = 'CustomField'
 ORDER By RefMetadataComponentName
 
+######################   List of all objects ##########################
+
+SELECT Label, QualifiedApiName FROM EntityDefinition WHERE IsCustomizable = true
+
 ########  ########
 
 ########  ########
