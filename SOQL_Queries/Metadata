@@ -4,6 +4,10 @@ SELECT Label, QualifiedApiName, DataType
 FROM FieldDefinition
 WHERE EntityDefinition.QualifiedApiName = 'fw1__Recurring_Invoice__c'
 
+SELECT Label, QualifiedApiName, IsCalculated, DataType, Length, NamespacePrefix
+FROM FieldDefinition
+WHERE EntityDefinition.QualifiedApiName = 'Account'
+
 ######## Active record triggered flows ########
 
 SELECT ApiName, TriggerType, Label 
