@@ -50,6 +50,31 @@ SELECT Label, QualifiedApiName,  NamespacePrefix FROM EntityDefinition WHERE IsC
 
 ########  ########
 
+SELECT Label, QualifiedApiName, IsCalculated, DataType, Length, NamespacePrefix
+FROM FieldDefinition
+WHERE EntityDefinition.QualifiedApiName = 'Lead'
+AND NamespacePrefix LIKE '%LFBN%'
+
+########  ########
+
+SELECT Id, Label, IsActive, ProcessType, Description, ActiveVersionId, ApiName, LastModifiedDate,
+RecordTriggerType, TriggerType, TriggerOrder
+FROM FlowDefinitionView
+WHERE IsActive = TRUE
+AND Label LIKE '%Lane Four Update Account SDR%'
+
+########  ########
+
+SELECT DeveloperName, Description, ExternalName, NamespacePrefix
+FROM CustomObject
+WHERE NamespacePrefix = 'LFBN'
+
+########  ########
+
+SELECT DeveloperName, TableEnumOrId, CreatedDate FROM CustomField WHERE CreatedDate = LAST_YEAR
+
+SELECT DeveloperName, TableEnumOrId, CreatedDate FROM CustomField WHERE TableEnumOrId = 'Account'
+
 ########  ########
 
 ########  ########
