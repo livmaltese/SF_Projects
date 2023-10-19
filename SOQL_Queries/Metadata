@@ -8,6 +8,10 @@ SELECT Label, QualifiedApiName, IsCalculated, DataType, Length, NamespacePrefix
 FROM FieldDefinition
 WHERE EntityDefinition.QualifiedApiName = 'Account'
 
+SELECT NameSpacePrefix, DeveloperName, TableEnumOrId, CreatedDate, LastModifiedDate 
+FROM CustomField 
+WHERE TableEnumOrId = 'Account'
+
 ######## Active record triggered flows ########
 
 SELECT ApiName, TriggerType, Label 
