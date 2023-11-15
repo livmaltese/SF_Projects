@@ -70,6 +70,15 @@ AND fw1__Account__r.Partners_Account__c != NULL
 AND fw1__Invoice__r.fw1__Status__c = 'Paid'
 AND fw1__Invoice__C NOT IN (SELECT Customer_Invoice_Number__c FROM Commission_Line_Item__c)
 
+SELECT Id, Name, fw1__Invoice__r.fw1__Account__r.Name, fw1__Invoice__r.fw1__Billing_Period_Start__c, fw1__Invoice__r.ERP_Invoice_ID__c, fw1__Invoice__r.fw1__Invoice_Date__c, fw1__Amount__c, fw1__Quantity__c, fw1__Unit_Price__c, fw1__Invoice__c, fw1__Invoice__r.RecordType.Name, fw1__Invoice__r.fw1__Account__r.RecordType.Name
+FROM fw1__Invoice_Line__c
+WHERE fw1__Invoice__r.fw1__Invoice_Date__c >= LAST_N_MONTHS:12
+AND fw1__Invoice__r.fw1__Invoice_Date__c < THIS_MONTH
+AND CurrencyIsoCode IN ('USD')
+AND fw1__Invoice__r.fw1__Account__r.Partners_Account__c != NULL
+AND fw1__Invoice__r.fw1__Status__c = 'Paid'
+AND fw1__Invoice__C NOT IN (SELECT Customer_Invoice_Number__c FROM Commission_Line_Item__c)
+
 ######## Set up fee invoice lines ########
 
 SELECT Id, Name, fw1__Invoice__r.fw1__Account__r.Name, fw1__Invoice__r.fw1__Billing_Period_Start__c, fw1__Invoice__r.ERP_Invoice_ID__c, fw1__Invoice__r.fw1__Invoice_Date__c, fw1__Amount__c, fw1__Quantity__c, fw1__Unit_Price__c, fw1__Invoice__c, fw1__Invoice__r.RecordType.Name, fw1__Invoice__r.fw1__Account__r.RecordType.Name
