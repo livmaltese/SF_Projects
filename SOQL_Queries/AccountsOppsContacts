@@ -28,12 +28,19 @@ AND Account.RecordType.Name = 'BWAP-Sage APA'
 AND RecordType.Name != 'Recontract'
 AND StageName != 'Closed Lost'
 
+SELECT OpportunityId, Opportunity.Name, Opportunity.Billed_date__c, Opportunity.Funnel__c,  
+Opportunity.Sub_Funnel__c, Opportunity.Account.Name, Opportunity.AccountId, Id, Product2Id, Name, 
+Net_Unit_Price__c, CurrencyIsoCode, Discount, Opportunity.RecordTypeId, Opportunity.Billing_Cycle__c, PricebookEntryId
+FROM OpportunityLineItem
+
 ####################################################################################################################
 CONTACTS
 
 ######## Contacts attached to accounts who went live in Jan. and Feb. ########
 
-SELECT Id, Name, Email, Phone, Contact_Status__c, AccountId, Account.Name, Account.Sage_Customer_ID__c, Account.Account_Stage__c, Account_Record_Type__c, fw1__Billing_Contact__c, Primary_Contact__c, HasOptedOutOfEmail, Pendo_Last_Login__c , pendo_bwap_visitor_roles__c
+SELECT Id, Name, Email, Phone, Contact_Status__c, AccountId, Account.Name, Account.Sage_Customer_ID__c, 
+Account.Account_Stage__c, Account_Record_Type__c, fw1__Billing_Contact__c, Primary_Contact__c, 
+HasOptedOutOfEmail, Pendo_Last_Login__c , pendo_bwap_visitor_roles__c
 FROM Contact 
 WHERE Account.Account_Stage__c = 'Live'
 AND fw1__Billing_contact__c = true
