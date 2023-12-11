@@ -17,9 +17,9 @@ Order_Status__c, Overage_Period_Start__c, Overage_Period_End__c, fw1__Billing_Pe
 FROM fw1__Recurring_Invoice__c 
 WHERE Order_Status__c IN ('Active' , 'Active - Pending Sage', 'Free Trial', 'On Hold', 'Churning')
 
-SELECT Id, fw1__Account__r.Name, fw1__Account__c, CurrencyIsoCode, FROM fw1__Recurring_Invoice__c 
+SELECT Id, fw1__Account__r.Name, fw1__Account__c, CurrencyIsoCode 
+FROM fw1__Recurring_Invoice__c 
 WHERE Order_Status__c IN ('Active', 'Active - Pending Sage', 'Free Trial', 'On Hold', 'Churning')
-AND ERPOrderId__c != NULL
 AND CurrencyIsoCode IN ('CAD','USD')
 AND fw1__Account__r.Account_Stage__c IN ('Live', 'Churning', 'Won')
 AND fw1__Account__r.Sales_Organization__c NOT IN ('GB00','FR00')
