@@ -99,3 +99,16 @@ CurrencyIsoCode, ERP_Amount__c, ERP_Tax_Amount__c, Payment_Date__c, fw1__Contact
 FROM fw1__Invoice__c 
 WHERE fw1__Invoice_Date__c >= LAST_N_MONTHS:6
 AND fw1__Account__r.Partners_Account__c != NULL
+
+######################   SAP Invoice Line Export   ##############################
+
+SELECT Id, fw1__Invoice__r.fw1__Account__c, fw1__Invoice__r.fw1__Account__r.Name, fw1__Invoice__c, fw1__Invoice__r.RecordType.Name, fw1__Invoice__r.fw1__Opportunity__c, fw1__Invoice__r.fw1__Opportunity__r.ContractId, fw1__Invoice__r.Recurring_Invoice_Schedule__c, fw1__Invoice__r.fw1__Billing_Period_Start__c, fw1__Invoice__r.ERP_Invoice_ID__c, fw1__Amount__c, fw1__Quantity__c, fw1__Unit_Price__c, fw1__Product2__c, fw1__Product2__r.Name, fw1__Product2__r.ERP_Product_Code__c
+FROM fw1__Invoice_Line__c
+WHERE fw1__Invoice__r.fw1__Billing_Period_Start__c = LAST_MONTH
+AND fw1__Invoice__r.ERP_Invoice_ID__c= NULL
+AND fw1__Invoice__r.fw1__Account__r.Name NOT IN ('LM Test','KO Test', 'AC Test')
+AND CurrencyIsoCode IN ('CAD','USD')
+AND fw1__Invoice__r.RecordType.Name IN ('Subscription Invoice', 'Expansion')
+AND (NOT Name LIKE '%Discount%')
+AND fw1__Invoice__r.Recurring_Invoice_Schedule__c = 'Monthly'
+AND (NOT fw1__Product2__r.Name LIKE '%Overage%')
