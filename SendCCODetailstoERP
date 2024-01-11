@@ -1,8 +1,5 @@
 global with sharing class SendCCODetailstoERP {
-/* Author: Sreenivasulu Patra
-* Date: 2022/05/05
-* Description: Created to send account details to ERP
-*/
+
     public static string sendAccount(List<sObject> accounts, String serviceName) { 
         HttpResponse res = new HttpResponse();
         Http http        = new Http();
