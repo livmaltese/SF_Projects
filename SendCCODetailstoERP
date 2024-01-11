@@ -1,0 +1,156 @@
+global with sharing class SendCCODetailstoERP {
+
+    public static string sendAccount(List<sObject> accounts, String serviceName) { 
+        HttpResponse res = new HttpResponse();
+        Http http        = new Http();
+        String jsonResp;
+        
+        try {
+            HttpRequest req  = Utils.getPOSTRequest(serviceName);
+            req.setBody(JSON.serialize(accounts));
+			req.setTimeout(120000);
+            System.debug('>>>>> SP - SendAccountToERP.sendAccount requestBody : ' + req.getBody());
+            res = http.send(req);            
+			jsonResp = res.getBody();            
+            System.debug('>>>>> SP - jsonResp : ' + jsonResp);
+
+        } catch(Exception e) {
+            list<Error_Log__c> errlist = new list<Error_Log__c>();
+            for(sObject sobj: accounts){
+                Error_Log__c errlog = new Error_Log__c();
+                errlog.Error__c = e.getMessage();
+                errlog.Error_type__c = 'Technical';
+                errlog.Response__c=res.getBody();
+                errlog.Object__c = 'Account';
+                errlog.Service_Type__c = 'Customers SFDC-SAP';
+                errlog.Sfdc_Record_Id__c = sobj.id;
+                errlog.Status__c='Failed';
+                errlist.add(errlog);
+            }
+            insert errlist;
+        }
+        return jsonResp;
+    }
+/*---------------------------------------------------------------------------------------*/    
+    public static string sendContract(List<opportunity> Contracts, String serviceName) { 
+        HttpResponse res = new HttpResponse();
+        Http http        = new Http();
+        String jsonResp;
+
+        try {
+            HttpRequest req  = Utils.getPOSTRequest(serviceName);
+            req.setBody(JSON.serialize(contracts));
+			req.setTimeout(120000);
+            System.debug('>>>>> SP - SendAccountToERP.sendContract requestBody : ' + req.getBody());
+            res = http.send(req);
+			jsonResp = res.getBody();            
+            System.debug('>>>>> SP - jsonResp : ' + jsonResp);
+            
+            list<Error_Log__c> errlist = new list<Error_Log__c>();
+            for(sObject sobj: Contracts){
+                Error_Log__c errlog = new Error_Log__c();
+                errlog.Request__c=JSON.serialize(Contracts);
+                errlog.Response__c=res.getBody();
+                errlog.Object__c = 'Contract';
+                errlog.Service_Type__c = 'Contracts SFDC-SAP';
+                errlog.Sfdc_Record_Id__c = sobj.id;
+                errlog.Status__c='Success';
+                errlist.add(errlog);
+            }
+            insert errlist;
+
+        } catch(Exception e) {
+            list<Error_Log__c> errlist = new list<Error_Log__c>();
+            for(opportunity contr: Contracts){
+                Error_Log__c errlog = new Error_Log__c();
+                errlog.Error__c = e.getMessage();
+                errlog.Error__c = e.getMessage();
+                errlog.Error_type__c = 'Technical';
+                errlog.Error_type__c = 'Technical';
+                errlog.Object__c = 'Contract';
+                errlog.Service_Type__c = 'Contracts SFDC-SAP';
+                //errlog.Sfdc_Record_Id__c = contr.ContractId;
+                errlog.Status__c='Failed';
+				errlist.add(errlog);
+            }
+            insert errlist;
+            
+            list<Error_Log__c> errlist3 = new list<Error_Log__c>();
+            for(opportunity conts: Contracts){
+                Error_Log__c errlog = new Error_Log__c();
+                errlog.Error__c = e.getMessage();
+                errlog.Error__c = e.getMessage();
+                errlog.Error_type__c = 'Technical';
+                errlog.Error_type__c = 'Technical';
+                errlog.Object__c = 'Contract';
+                errlog.Service_Type__c = 'Contracts SFDC-SAP';
+                //errlog.Sfdc_Record_Id__c = contr.ContractId;
+                errlog.Status__c='Failed';
+				errlist3.add(errlog);
+            }
+        }
+        return jsonResp;
+    }
+/*---------------------------------------------------------------------------------------*/ 
+    public static string sendRecurringInvoice(List<fw1__Recurring_Invoice__c> ReccInvoices, String serviceName) { 
+        HttpResponse res = new HttpResponse();
+        Http http        = new Http();
+        String jsonResp;
+
+        try {
+            HttpRequest req  = Utils.getPOSTRequest(serviceName);
+            req.setBody(JSON.serialize(ReccInvoices));
+			req.setTimeout(120000);
+            System.debug('>>>>> SP - SendAccountToERP.sendContract requestBody : ' + req.getBody());
+            res = http.send(req);
+			jsonResp = res.getBody();            
+            System.debug('>>>>> SP - jsonResp : ' + jsonResp);
+            
+            list<Error_Log__c> errlist = new list<Error_Log__c>();
+            for(sObject sobj: ReccInvoices){
+                Error_Log__c errlog = new Error_Log__c();
+                errlog.Request__c=JSON.serialize(ReccInvoices);
+                errlog.Response__c=res.getBody();
+                errlog.Object__c = 'Recurring';
+                errlog.Service_Type__c = 'Orders SFDC-SAP';
+                errlog.Sfdc_Record_Id__c = sobj.id;
+                errlog.Status__c='Success';
+                errlist.add(errlog);
+            }
+            insert errlist;
+            
+        } catch(Exception e) {
+            list<Error_Log__c> errlist = new list<Error_Log__c>();
+            for(fw1__Recurring_Invoice__c Ris: ReccInvoices){
+                Error_Log__c errlog = new Error_Log__c();
+                errlog.Error__c = e.getMessage();
+                errlog.Error__c = e.getMessage();
+                errlog.Error_type__c = 'Technical';
+                errlog.Error_type__c = 'Technical';
+                errlog.Object__c = 'Reccuring Invoices';
+                errlog.Service_Type__c = 'Orders SFDC-SAP';
+                errlog.Sfdc_Record_Id__c = Ris.Id;
+                errlog.Status__c='Failed';
+				errlist.add(errlog);
+                
+            }
+
+            list<Error_Log__c> errlist2 = new list<Error_Log__c>();
+            for(fw1__Recurring_Invoice__c recInv: ReccInvoices){
+                Error_Log__c errlog = new Error_Log__c();
+                errlog.Error__c = e.getMessage();
+                errlog.Error__c = e.getMessage();
+                errlog.Error_type__c = 'Technical';
+                errlog.Error_type__c = 'Technical';
+                errlog.Object__c = 'Reccuring Invoices';
+                errlog.Service_Type__c = 'Orders SFDC-SAP';
+                errlog.Sfdc_Record_Id__c = recInv.Id;
+                errlog.Status__c='Failed';
+				errlist2.add(errlog);                
+            }
+            insert errlist;
+        }
+        return jsonResp;
+    }
+
+}
