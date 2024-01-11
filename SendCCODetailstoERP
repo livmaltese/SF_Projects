@@ -1,5 +1,8 @@
 global with sharing class SendCCODetailstoERP {
-
+/* Author: Sreenivasulu Patra
+* Date: 2022/05/05
+* Description: Created to send account details to ERP
+*/
     public static string sendAccount(List<sObject> accounts, String serviceName) { 
         HttpResponse res = new HttpResponse();
         Http http        = new Http();
@@ -13,6 +16,19 @@ global with sharing class SendCCODetailstoERP {
             res = http.send(req);            
 			jsonResp = res.getBody();            
             System.debug('>>>>> SP - jsonResp : ' + jsonResp);
+            
+            list<Error_Log__c> errlist = new list<Error_Log__c>();
+            for(sObject sobj: accounts){
+                Error_Log__c errlog = new Error_Log__c();
+                errlog.Request__c=JSON.serialize(accounts);
+                errlog.Response__c=res.getBody();
+                errlog.Object__c = 'Account';
+                errlog.Service_Type__c = 'Customers SFDC-SAP';
+                errlog.Sfdc_Record_Id__c = sobj.id;
+                errlog.Status__c='Success';
+                errlist.add(errlog);
+            }
+            insert errlist;
 
         } catch(Exception e) {
             list<Error_Log__c> errlist = new list<Error_Log__c>();
@@ -32,14 +48,19 @@ global with sharing class SendCCODetailstoERP {
         return jsonResp;
     }
 /*---------------------------------------------------------------------------------------*/    
-    public static string sendContract(List<opportunity> Contracts, String serviceName) { 
+    public static string sendContract(List<opportunity> Contracts, /*List<contract> ContractRecs,*/ String serviceName) { 
         HttpResponse res = new HttpResponse();
         Http http        = new Http();
         String jsonResp;
 
         try {
             HttpRequest req  = Utils.getPOSTRequest(serviceName);
-            req.setBody(JSON.serialize(contracts));
+            //if(contracts.size()>0){
+                req.setBody(JSON.serialize(contracts));
+            /*}
+            else{
+                req.setBody(JSON.serialize(ContractRecs));
+            }*/
 			req.setTimeout(120000);
             System.debug('>>>>> SP - SendAccountToERP.sendContract requestBody : ' + req.getBody());
             res = http.send(req);
