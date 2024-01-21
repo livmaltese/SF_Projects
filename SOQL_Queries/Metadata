@@ -81,6 +81,11 @@ SELECT DeveloperName, TableEnumOrId, CreatedDate FROM CustomField WHERE TableEnu
 
 ########  ########
 
+SELECT DurableId, EntityParticle.DeveloperName, EntityParticle.DataType, Label, IsActive, Value, IsDefaultValue
+FROM PicklistValueInfo 
+WHERE EntityParticle.EntityDefinition.DeveloperName IN ('Account','Opportunity', 'Contact','Case')
+ORDER BY DurableId
+
 ########  ########
 
 ########  ########
