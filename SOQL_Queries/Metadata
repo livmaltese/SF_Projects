@@ -52,6 +52,20 @@ ORDER By RefMetadataComponentName
 
 SELECT Label, QualifiedApiName,  NamespacePrefix FROM EntityDefinition WHERE IsCustomizable = true
 
+######## Export of picklist values for specified objects ########
+
+SELECT DurableId, EntityParticle.EntityDefinitionId, EntityParticle.DeveloperName, EntityParticle.Label, 
+EntityParticle.DataType, Label, Value, IsDefaultValue
+FROM PicklistValueInfo 
+WHERE EntityParticle.EntityDefinition.DeveloperName IN ('Account')
+ORDER BY DurableId
+
+SELECT DurableId, EntityParticle.EntityDefinitionId, EntityParticle.DeveloperName, EntityParticle.Label, 
+Label, Value, IsDefaultValue
+FROM PicklistValueInfo 
+WHERE EntityParticle.EntityDefinition.DeveloperName IN ('Account','Opportunity', 'Contact','Case')
+ORDER BY DurableId
+
 ########  ########
 
 SELECT Label, QualifiedApiName, IsCalculated, DataType, Length, NamespacePrefix
@@ -78,13 +92,6 @@ WHERE NamespacePrefix = 'LFBN'
 SELECT DeveloperName, TableEnumOrId, CreatedDate FROM CustomField WHERE CreatedDate = LAST_YEAR
 
 SELECT DeveloperName, TableEnumOrId, CreatedDate FROM CustomField WHERE TableEnumOrId = 'Account'
-
-########  ########
-
-SELECT DurableId, EntityParticle.DeveloperName, EntityParticle.DataType, Label, IsActive, Value, IsDefaultValue
-FROM PicklistValueInfo 
-WHERE EntityParticle.EntityDefinition.DeveloperName IN ('Account','Opportunity', 'Contact','Case')
-ORDER BY DurableId
 
 ########  ########
 
