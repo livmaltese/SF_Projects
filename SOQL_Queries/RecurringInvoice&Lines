@@ -65,6 +65,11 @@ WHERE fw1__Recurring_Invoice__r.ERP_RI_Contract_ID__c != NULL
 AND fw1__Product2__r.Name LIKE '%Overage%'
 
 ########  ########
-
+SELECT Id, fw1__Recurring_Invoice__c, fw1__Recurring_Invoice__r.fw1__Account__c, fw1__Recurring_Invoice__r.fw1__Account_Name__c, 
+fw1__Product2__r.Name, fw1__Product2__c, CurrencyIsoCode
+FROM fw1__Recurring_Invoice_Line__c 
+WHERE fw1__Recurring_Invoice__c IN ('a5C5a0000013YpDEAU', 'a5C5a0000013VkMEAU', 'a5C5a0000013VPbEAM', 'a5C5a0000013VoFEAU', 
+'a5COL0000005Y2f2AE', 'a5C5a0000013VUHEA2', 'a5C5a0000013YuREAU', 'a5C1H000000YfHZUA0', 'a5C1H000000YfAxUAK', 'a5C1H000000YfUdUAK', 
+'a5C5a0000013TKOEA2', 'a5C5a000001ri8cEAA')
 
 
