@@ -67,6 +67,12 @@ WHERE EntityDefinition.QualifiedApiName = 'fw1__Recurring_Invoice__c'
 SELECT Name, Pricebook2Id, CurrencyIsoCode, Product2Id, IsActive
 FROM PricebookEntry
 
+SELECT Name, Id, Pricebook2Id, CurrencyIsoCode, Product2Id, IsActive
+FROM PricebookEntry
+WHERE Pricebook2Id = '01s5a000002HEUMAA4'
+AND CurrencyIsoCode IN ('CAD','USD')
+AND IsActive = true
+
 ########  Sage Billing Contacts Query ########
 
 SELECT Id, Name, Email, Phone, Contact_Status__c, AccountId, Account.Name, Account.Sage_Customer_ID__c, 
