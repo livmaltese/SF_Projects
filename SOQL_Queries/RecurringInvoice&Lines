@@ -43,6 +43,14 @@ FROM fw1__Recurring_Invoice_Line__c
 WHERE fw1__Recurring_Invoice__r.fw1__Is_Active__c = TRUE 
 AND fw1__Product2__r.Name IN ('EFT - Cambridge', 'ACH - Cambridge', 'Wire')
 
+######## Recurring invoice line items for Repay billing ########
+
+SELECT Id, fw1__Recurring_Invoice__c, fw1__Recurring_Invoice__r.fw1__Account__c, fw1__Recurring_Invoice__r.fw1__Account_Name__c, 
+fw1__Quantity__c, fw1__Product2__r.Name, fw1__Unit_Price__c, fw1__Amount__c, fw1__Net_Amount__c 
+FROM fw1__Recurring_Invoice_Line__c 
+WHERE fw1__Recurring_Invoice__r.fw1__Is_Active__c = TRUE 
+AND fw1__Product2__r.Name LIKE '%Repay%'
+
 ######## Sage API project RI query ########
 
 SELECT Id, fw1__Account__c, fw1__Account__r.CSM__r.Name, fw1__Account__r.Name, RecordType.Name, fw1__Account__r.Sage_Customer_ID__c, fw1__Account__r.CurrencyIsoCode, Name, fw1__Schedule__c, Order_Status__c, Overage_Period_Start__c, Overage_Period_End__c, X10_Buffer__c, fw1__Billing_Period_Start__c, CurrencyIsoCode, Rollup_Invoice_Tier__c, Overages_Last_Month__c, Invoices_Processed_Last_Month__c, Sage_Overages_Last_Billing_Period__c
