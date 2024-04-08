@@ -11,6 +11,15 @@ Invoice_Line_Amount__c, Line_Item_Quantity__c, Customer_Account_Name__r.ERP_Acco
 FROM Commission_Line_Item__c
 WHERE Commission_Statement__r.Start_Date__c = LAST_MONTH
 
+####### Payments Update Paid Amount ###############
+
+SELECT Id, CurrencyIsoCode, fw1__Payment_Method__c, fw1__Account__c, fw1__Invoice__c, fw1__Payment_Date__c, fw1__Invoice__r.fw1__Total_Paid_Amount__c, fw1__Total_Paid_Amount__c, LastModifiedBy.Name
+FROM fw1__Payment__c
+WHERE fw1__Invoice__r.fw1__Status__c = 'Overdue'
+AND CurrencyIsoCode IN ('USD','CAD')
+AND fw1__Payment_Method__c != 'Credit Memo'
+AND LastModifiedBy.Name = 'Global Systems Integration'
+
 ######## Commission Statements last month ########
 
 SELECT CDM__c, Commissionee_Account__c, Commission_Statement_Number__c, CurrencyIsoCode, Id, Month__c, Name,
