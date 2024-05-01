@@ -37,16 +37,16 @@ AND fw1__Schedule__c = 'Monthly'
 
 ######## Recurring invoice line items for Cambridge billing ########
 
-SELECT Id, fw1__Recurring_Invoice__c, fw1__Recurring_Invoice__r.fw1__Account__c, fw1__Recurring_Invoice__r.fw1__Account_Name__c, 
-fw1__Quantity__c, fw1__Product2__r.Name, fw1__Unit_Price__c, fw1__Amount__c, fw1__Net_Amount__c 
+SELECT Id, fw1__Recurring_Invoice__c, fw1__Recurring_Invoice__r.fw1__Account__c, fw1__Recurring_Invoice__r.fw1__Account_Name__c, fw1__Product2__r.Name,
+fw1__Quantity__c
 FROM fw1__Recurring_Invoice_Line__c 
 WHERE fw1__Recurring_Invoice__r.fw1__Is_Active__c = TRUE 
 AND fw1__Product2__r.Name IN ('EFT - Cambridge', 'ACH - Cambridge', 'Wire')
 
 ######## Recurring invoice line items for Repay billing ########
 
-SELECT Id, fw1__Recurring_Invoice__c, fw1__Recurring_Invoice__r.fw1__Account__c, fw1__Recurring_Invoice__r.fw1__Account_Name__c, 
-fw1__Quantity__c, fw1__Product2__r.Name, fw1__Unit_Price__c, fw1__Amount__c, fw1__Net_Amount__c 
+SELECT Id, fw1__Recurring_Invoice__c, fw1__Recurring_Invoice__r.fw1__Account__c, fw1__Recurring_Invoice__r.fw1__Account_Name__c, fw1__Product2__r.Name,
+fw1__Quantity__c
 FROM fw1__Recurring_Invoice_Line__c 
 WHERE fw1__Recurring_Invoice__r.fw1__Is_Active__c = TRUE 
 AND fw1__Product2__r.Name LIKE '%Repay%'
